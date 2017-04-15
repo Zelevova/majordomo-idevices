@@ -28,10 +28,20 @@ function soundToApple($name, $subject = "") {
   }
 }
 
-function lockToApple($device, $message, $phoneNumber = "") {
+function lockToApple($name, $message, $phoneNumber = "") {
+  require_once(ROOT.'modules/idevices/FindMyiPhone.php');
+  try {
+    $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$$
+    foreach($devices as $device) {
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
+      $FindMyiPhone->lostMode($device['DEVICE_ID'], $message, $phoneNumber);
+    }
+  } catch (exception $e) {
+    registerError('idevices', 'ERROR: ' . $e->getMessage());
+  }
 }
 
-function findApple($device, $timeout = 60) {
+function findApple($name, $timeout = 60) {
   require_once(ROOT.'modules/idevices/FindMyiPhone.php');
   try {
     $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$$
@@ -40,7 +50,7 @@ function findApple($device, $timeout = 60) {
       $FindMyiPhone->playSound($device['DEVICE_ID'], $subject);
     }
   } catch (exception $e) {
-    registerError('idevices', 'ERROR: ' . $e->getMessage());    
+    registerError('idevices', 'ERROR: ' . $e->getMessage());
   }
 }
 ?>
