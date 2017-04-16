@@ -222,7 +222,16 @@ function usual(&$out) {
   }
  }
  function processCycle() {
-  //to-do
+  $devices = SQLSelect("SELECT NAME, APPLEID
+  FROM idevices
+  WHERE GET_LOCATION > 0 AND DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) <= NOW()
+  ORDER BY DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) - NOW()");
+  foreach($devices as $device) 
+    findApple($device['NAME']);
+  $timeout = SQLSelectOne("SELECT MIN(DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE)) AS TIME
+  FROM idevices
+  WHERE GET_LOCATION > 0");
+  time_sleep_until(strtotime($timeout['TIME']));
  }
 /**
 * Install
