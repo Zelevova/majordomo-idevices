@@ -17,7 +17,7 @@ if (!$tmp['ID'])
    exit; // no devices added -- no need to run this cycle
 echo date("H:i:s") . " running " . basename(__FILE__) . PHP_EOL;
 $latest_check=0;
-$checkEvery=5; // poll every 5 seconds
+$checkEvery=21; // poll every 5 seconds
 while (1)
 {
    setGlobal((str_replace('.php', '', basename(__FILE__))) . 'Run', time(), 1);
