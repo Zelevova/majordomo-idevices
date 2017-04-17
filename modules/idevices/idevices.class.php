@@ -252,6 +252,7 @@ function usual(&$out) {
 * @access public
 */
  function uninstall() {
+  unsubscribeFromEvent($this->name, 'SAY');
   SQLExec('DROP TABLE IF EXISTS appleIDs');
   SQLExec('DROP TABLE IF EXISTS idevices');
   parent::uninstall();
