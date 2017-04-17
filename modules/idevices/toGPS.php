@@ -2,6 +2,7 @@
 
 function AppletoGPS($idevice)
 {
+if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
   if($idevice['NAME'])
   {
     $sqlQuery = "SELECT *
@@ -219,6 +220,7 @@ function AppletoGPS($idevice)
   }
   if ($user['LINKED_OBJECT'] && !$location_found)
     setGlobal($user['LINKED_OBJECT'] . '.seenAt', '');
+}
 }
 
 /**
