@@ -22,8 +22,15 @@
    $prop['LONGITUDE'] = $location->longitude;
    $prop['UPDATED']=date('Y-m-d H:i:s');
    SQLUpdateInsert('idevices', $prop);
-   require_once('toGPS.php');
-   AppleToGPS($prop);
+   if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
+    $_REQUEST['deviceid']  = $prop['NAME'];
+    $_REQUEST['battlevel'] = $prop['BATTERY_LEVEL'];
+    $_REQUEST['charging'] = $prop['BATTERY_STATUS'];
+    $_REQUEST['latitude']  = $prop['LATITUDE'];
+    $_REQUEST['longitude'] = $prop['LONGITUDE'];
+    $_REQUEST['accuracy'] = $prop['ACCURACY'];
+    include_once('./gps.php');
+   }
   }
   unset($device);
  } catch (exception $e) {
