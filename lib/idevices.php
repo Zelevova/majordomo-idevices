@@ -69,7 +69,7 @@ function findApple($name, $timeout = 60) {
         $_REQUEST['latitude']  = $prop['LATITUDE'];
         $_REQUEST['longitude'] = $prop['LONGITUDE'];
         $_REQUEST['accuracy'] = $prop['ACCURACY'];
-        include_once('./gps.php');
+        include_once(ROOT.'gps.php');
       }
     }
   } catch (exception $e) {
