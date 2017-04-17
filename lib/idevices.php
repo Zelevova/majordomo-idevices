@@ -49,14 +49,14 @@ function findApple($name, $timeout = 60) {
     foreach($devices as $device) {
       $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
       $location =  $FindMyiPhone->locate($device['DEVICE_ID']);
-      $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($record['APPLEID'])."' AND DEVICE_ID='".DBSafe($device_id)."'");
-      $prop['NAME'] = $device->name;
-      $prop['DEVICE_ID'] = $device_id;
-      $prop['APPLEID'] = $record['APPLEID'];
-      $prop['BATTERY_LEVEL'] = $device->batteryLevel*100;
-      $prop['BATTERY_STATUS'] = ($device->batteryStatus == "NotCharging") ? 0 : 1;
+      $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($device['APPLEID'])."' AND DEVICE_ID='".DBSafe($device['DEVICE_ID'])."'");
+      $prop['NAME'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->name;
+      $prop['DEVICE_ID'] = $device['DEVICE_ID'];
+      $prop['APPLEID'] = $device['APPLEID'];
+      $prop['BATTERY_LEVEL'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100;
+      $prop['BATTERY_STATUS'] = ($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryStatus == "NotCharging") ? 0 : 1;
       if($location->horizontalAccuracy > 1000)
-        $location =  $FindMyiPhone->locate($device_id);
+        $location =  $FindMyiPhone->locate($device['DEVICE_ID']);
       $prop['ACCURACY'] = $location->horizontalAccuracy;
       $prop['LATITUDE'] = $location->latitude;
       $prop['LONGITUDE'] = $location->longitude;
