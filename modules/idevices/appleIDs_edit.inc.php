@@ -45,7 +45,7 @@
    $new_id=0;
    global $delete_id;
    if ($delete_id) {
-    SQLExec("DELETE FROM idevices WHERE ID='".(int)$delete_id."'");
+    SQLExec("DELETE FROM idevices WHERE APPLEID IN (SELECT APPLEID FROM appleIDs WHERE ID='".DBSafe($delete_id)."'");
    }
    $properties=SQLSelect("SELECT * FROM idevices WHERE appleid='".$rec['APPLEID']."' ORDER BY ID");
    $total=count($properties);

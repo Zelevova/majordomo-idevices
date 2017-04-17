@@ -1,6 +1,7 @@
 <?php
+
 /**
-* iDevices 
+* iDevices
 * @package project
 * @author Wizard <sergejey@gmail.com>
 * @copyright http://majordomo.smartliving.ru/ (c)
@@ -131,7 +132,7 @@ function admin(&$out) {
    $this->edit_appleIDs($out, $this->id);
   }
   if ($this->view_mode=='delete_appleIDs') {
-   $this->delete_appleIDs($this->id);
+   $this->delete_appleIDs($this->appleid);
    $this->redirect("?data_source=appleIDs");
   }
  }
@@ -226,13 +227,13 @@ function usual(&$out) {
   FROM idevices
   WHERE GET_LOCATION > 0 AND DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) <= NOW()
   ORDER BY DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) - NOW()");
-  foreach($devices as $device) 
+  foreach($devices as $device)
     findApple($device['NAME']);
   $timeout = SQLSelectOne("SELECT MIN(DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE)) AS TIME
   FROM idevices
   WHERE GET_LOCATION > 0");
   time_sleep_until(strtotime($timeout['TIME']));
- }
+}
 /**
 * Install
 *
@@ -252,9 +253,9 @@ function usual(&$out) {
 * @access public
 */
  function uninstall() {
-  unsubscribeFromEvent($this->name, 'SAY');
   SQLExec('DROP TABLE IF EXISTS appleIDs');
   SQLExec('DROP TABLE IF EXISTS idevices');
+  unsubscribeFromEvent($this->name, 'SAY');
   parent::uninstall();
  }
 /**
