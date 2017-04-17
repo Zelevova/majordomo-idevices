@@ -1,7 +1,7 @@
 <?php
 /*
 *
-* English language file for findMyiPhone module
+* English language file for iDevices module
 *
 */
 $dictionary=array(
