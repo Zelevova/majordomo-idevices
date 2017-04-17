@@ -255,6 +255,8 @@ function usual(&$out) {
  function uninstall() {
   SQLExec('DROP TABLE IF EXISTS appleIDs');
   SQLExec('DROP TABLE IF EXISTS idevices');
+  if(file_exists(ROOT.'lib/idevices.php'))
+    unlink(ROOT.'lib/idevices.php');
   unsubscribeFromEvent($this->name, 'SAY');
   parent::uninstall();
  }
