@@ -62,6 +62,8 @@ function findApple($name, $timeout = 60) {
       $prop['LONGITUDE'] = $location->longitude;
       $prop['UPDATED']=date('Y-m-d H:i:s');
       SQLUpdateInsert('idevices', $prop);
+      require_once(ROOT.'modules/idevices/toGPS.php');
+      AppleToGPS($prop);
     }
   } catch (exception $e) {
     registerError('idevices', 'ERROR: ' . $e->getMessage());
