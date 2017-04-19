@@ -229,11 +229,7 @@ function usual(&$out) {
   ORDER BY DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) - NOW()");
   foreach($devices as $device)
     findApple($device['NAME']);
-  $timeout = SQLSelectOne("SELECT MIN(DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE)) AS TIME
-  FROM idevices
-  WHERE GET_LOCATION > 0");
-  time_sleep_until(strtotime($timeout['TIME']));
-}
+ }
 /**
 * Install
 *
