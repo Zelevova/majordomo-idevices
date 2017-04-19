@@ -14,7 +14,7 @@
    $prop['NAME'] = $device->name;
    $prop['DEVICE_ID'] = $device_id;
    $prop['APPLEID'] = $record['APPLEID'];
-   $prop['GET_LOCATION'] = 30;
+   //$prop['GET_LOCATION'] = 30;
    $prop['BATTERY_LEVEL'] = $device->batteryLevel*100;
    $prop['BATTERY_STATUS'] = ($device->batteryStatus == "NotCharging") ? 0 : 1;
    $prop['ACCURACY'] = $location->horizontalAccuracy;
