@@ -185,9 +185,10 @@ function usual(&$out) {
 * @access public
 */
  function delete_appleIDs($id) {
-  $rec=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='$id'");
+  //$rec=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='$id'");
   // some action for related tables
-  SQLExec("DELETE FROM appleIDs WHERE ID='".$rec['ID']."'");
+  //SQLExec("DELETE FROM appleIDs WHERE ID='".$rec['ID']."'");
+  SQLExec("DELETE FROM appleIDs WHERE ID='".$id."'");
  }
 /**
 * idevices search
@@ -228,7 +229,7 @@ function usual(&$out) {
   WHERE GET_LOCATION > 0 AND DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) <= NOW()
   ORDER BY DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) - NOW()");
   foreach($devices as $device)
-    findApple($device['NAME']); 
+    findApple($device['NAME']);
  }
 /**
 * Install
@@ -270,12 +271,12 @@ idevices -
 */
   $data = <<<EOD
  appleIDs: ID int(10) unsigned NOT NULL auto_increment
- appleIDs: APPLEID varchar(50) NOT NULL DEFAULT ''
+ appleIDs: APPLEID varchar(50) NOT NULL
  appleIDs: PASSWORD varchar(50) NOT NULL DEFAULT ''
  idevices: ID int(10) unsigned NOT NULL auto_increment
- idevices: NAME varchar(50) NOT NULL DEFAULT ''
+ idevices: NAME varchar(50) NOT NULL
  idevices: DEVICE_ID varchar(70) NOT NULL DEFAULT ''
- idevices: APPLEID varchar(50) NOT NULL DEFAULT ''
+ idevices: APPLEID varchar(50) NOT NULL
  idevices: GET_LOCATION int(5) unsigned DEFAULT '0'
  idevices: BATTERY_LEVEL int(3) unsigned NOT NULL DEFAULT '0'
  idevices: BATTERY_STATUS int(1) unsigned DEFAULT '0'
