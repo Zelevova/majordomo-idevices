@@ -228,7 +228,7 @@ function usual(&$out) {
   WHERE GET_LOCATION > 0 AND DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) <= NOW()
   ORDER BY DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) - NOW()");
   foreach($devices as $device)
-    findApple($device['NAME']);
+    findApple($device['NAME']); 
  }
 /**
 * Install
