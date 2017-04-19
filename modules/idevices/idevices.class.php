@@ -132,8 +132,8 @@ function admin(&$out) {
    $this->edit_appleIDs($out, $this->id);
   }
   if ($this->view_mode=='delete_appleIDs') {
-   $this->delete_appleIDs($this->appleid);
-   $this->redirect("?data_source=appleIDs");
+    $this->delete_appleIDs($this->id);
+    $this->redirect("?data_source=appleIDs");
   }
  }
  if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
@@ -185,10 +185,9 @@ function usual(&$out) {
 * @access public
 */
  function delete_appleIDs($id) {
-  //$rec=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='$id'");
-  // some action for related tables
-  //SQLExec("DELETE FROM appleIDs WHERE ID='".$rec['ID']."'");
-  SQLExec("DELETE FROM appleIDs WHERE ID='".$id."'");
+  $rec=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='$id'");
+  SQLExec("DELETE FROM idevices WHERE APPLEID='".$rec['APPLEID']."'");
+  SQLExec("DELETE FROM appleIDs WHERE ID='".$rec['ID']."'");
  }
 /**
 * idevices search

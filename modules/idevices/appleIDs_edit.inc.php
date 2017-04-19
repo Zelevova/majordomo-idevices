@@ -45,27 +45,21 @@
    $new_id=0;
    global $delete_id;
    if ($delete_id) {
-    SQLExec("DELETE FROM idevices WHERE APPLEID IN (SELECT APPLEID FROM appleIDs WHERE ID='".DBSafe($delete_id)."'");
+    SQLExec("DELETE FROM idevices WHERE ID='".DBSafe($delete_id)."'");
    }
    $properties=SQLSelect("SELECT * FROM idevices WHERE appleid='".$rec['APPLEID']."' ORDER BY ID");
    $total=count($properties);
    for($i=0;$i<$total;$i++) {
-    if ($properties[$i]['APPLEID']==$new_id) continue;
+    if ($properties[$i]['ID']==$new_id) continue;
     if ($this->mode=='update') {
-      global ${'name'.$properties[$i]['APPLEID']};
-      $properties[$i]['NAME']=trim(${'name'.$properties[$i]['APPLEID']});
-      global ${'device_id'.$properties[$i]['APPLEID']};
-      $properties[$i]['DEVICE_ID']=trim(${'device_id'.$properties[$i]['APPLEID']});
-      global ${'appleid'.$properties[$i]['APPLEID']};
-      $properties[$i]['APPLEID']=trim(${'appleid'.$properties[$i]['APPLEID']});
-      global ${'get_location'.$properties[$i]['APPLEID']};
-      $properties[$i]['GET_LOCATION']=trim(${'get_location'.$properties[$i]['APPLEID']});
-      global ${'linked_object'.$properties[$i]['APPLEID']};
-      $properties[$i]['LINKED_OBJECT']=trim(${'linked_object'.$properties[$i]['APPLEID']});
-      global ${'linked_property'.$properties[$i]['APPLEID']};
-      $properties[$i]['LINKED_PROPERTY']=trim(${'linked_property'.$properties[$i]['APPLEID']});
-      global ${'linked_method'.$properties[$i]['APPLEID']};
-      $properties[$i]['LINKED_METHOD']=trim(${'linked_method'.$properties[$i]['APPLEID']});
+      global ${'get_location'.$properties[$i]['ID']};
+      $properties[$i]['GET_LOCATION']=trim(${'get_location'.$properties[$i]['ID']});
+      global ${'linked_object'.$properties[$i]['ID']};
+      $properties[$i]['LINKED_OBJECT']=trim(${'linked_object'.$properties[$i]['ID']});
+      global ${'linked_property'.$properties[$i]['ID']};
+      $properties[$i]['LINKED_PROPERTY']=trim(${'linked_property'.$properties[$i]['ID']});
+      global ${'linked_method'.$properties[$i]['ID']};
+      $properties[$i]['LINKED_METHOD']=trim(${'linked_method'.$properties[$i]['ID']});
       SQLUpdate('idevices', $properties[$i]);
       $old_linked_object=$properties[$i]['LINKED_OBJECT'];
       $old_linked_property=$properties[$i]['LINKED_PROPERTY'];
