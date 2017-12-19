@@ -3,6 +3,7 @@
  $record=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='".(int)$id."'");
  require_once('FindMyiPhone.php');
  try {
+  set_time_limit(6000);
   $FindMyiPhone = new FindMyiPhone($record['APPLEID'], $record['PASSWORD'], false);
   $FindMyiPhone->getDevices();
   foreach ($FindMyiPhone->devices as $device_id => $device)
