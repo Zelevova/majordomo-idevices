@@ -45,6 +45,7 @@ function lockToApple($name, $message, $phoneNumber = "") {
 function findApple($name, $timeout = 60) {
   require_once(ROOT.'modules/idevices/FindMyiPhone.php');
   try {
+    set_time_limit(6000);
     $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$name."'");
     foreach($devices as $device) {
       $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
