@@ -56,7 +56,7 @@ function findApple($name, $timeout = 60) {
       $prop['NAME'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->name;
       $prop['DEVICE_ID'] = $device['DEVICE_ID'];
       $prop['APPLEID'] = $device['APPLEID'];
-      $prop['BATTERY_LEVEL'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100;
+      $prop['BATTERY_LEVEL'] = round($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100, 2);
       $prop['BATTERY_STATUS'] = ($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryStatus == "NotCharging") ? 0 : 1;
       $prop['ACCURACY'] = $location->horizontalAccuracy;
       $prop['LATITUDE'] = $location->latitude;
