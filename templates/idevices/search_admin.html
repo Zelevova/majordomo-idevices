@@ -1,0 +1,81 @@
+<!-- table idevices search -->
+<div class="float-right">
+  <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about"><#LANG_ABOUT#>&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
+    </button>
+</div>
+
+<div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about1" aria-hidden="true">
+  <!-- <div id="about" class="modal hide"> -->
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">iDevices</h4>
+      </div>
+      <div class="modal-body">
+        <div class="float-right">
+          <a href="http://icloud.com/#find" target="_blank">
+            <img src="../templates/idevices/find_icon.png"  width="48" height="48">
+          </a>
+        </div>
+        <p class="float-left"> Модуль iDevices.<br>
+        Обсуждение модуля <a href="http://majordomo.smartliving.ru/forum" target="_blank">здесь</a>.<br>
+        </p>
+        <hr size="1">
+        <p class="float-left">
+        Поддержать автора материально:
+        <ul>
+          <li><a href='https://connect.smartliving.ru/tasks/33.html?show_supported=1'  target="_blank">Connect</a></li>
+        </ul>
+        </p>
+        <div class="modal-footer">
+          <div class="pull-left">Telegram: <a href="https://telegram.me/Zelevova" target="_blank">@Zelevova</a> ;)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <i class="glyphicon glyphicon-apple">iDevices</i>
+  &nbsp;
+  <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> <#LANG_SETUP#></a>
+</div>
+
+<div class="collapse" id='api_settings'>&nbsp;
+  <form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+    <fieldset>
+      <div class="form-group">
+        <label class="control-label"><#LANG_DEBUG#></label>
+        <div class="controls"><input type="checkbox" name="debug" value="1"[#if DEBUG="1"#] checked[#endif#]></div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" name="subm" value="Submit" class="btn btn-primary"><#LANG_UPDATE#></button>
+        <input type="hidden" name="view_mode" value="update_settings">
+        <input type="hidden" name="mode" value="update">
+        <input type="hidden" name="tab" value="<#TAB#>">
+      </div>
+    </fieldset>
+  </form>
+</div>
+<br/>
+
+<ul class="nav nav-tabs">
+  <li [#if TAB=="" || TAB=="devices"#] class="active"[#endif#]><a href="?tab=devices"><#LANG_DEVICES#></a> </li>
+  <li [#if TAB=="appleids"#] class="active"[#endif#]><a href="?tab=appleids"><#LANG_AppleIDs#></a> </li>
+  <li [#if TAB=="log"#] class="active"[#endif#]><a href="?tab=log"><#LANG_GENERAL_EVENTS_LOG#></a> </li>
+  <li [#if TAB=="help"#] class="active"[#endif#]><a href="?tab=help"><#LANG_HELP#></a> </li>
+</ul>
+
+[#if TAB="devices" || TAB==""#]
+[#inc search_devices.html#]
+[#endif#]
+[#if TAB="appleids"#]
+[#inc search_appleids.html#]
+[#endif#]
+[#if TAB="log"#]
+[#inc search_log.html#]
+[#endif#]
+[#if TAB="help"#]
+[#inc help.html#]
+[#endif#]

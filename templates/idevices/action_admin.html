@@ -1,57 +1,19 @@
+ <!-- action usual -->
+ [#if DATA_SOURCE="idevices" || DATA_SOURCE=""#]
 
- <!-- action usual -->
- [#if DATA_SOURCE="appleIDs" || DATA_SOURCE=""#]
- <!-- table appleIDs search -->
- [#if VIEW_MODE="search_appleIDs" || VIEW_MODE=""#]
-  [#inc appleIDs_search_admin.html#]
- [#endif VIEW_MODE#]
- <!-- / table appleIDs search -->
- <!-- table appleIDs edit -->
- [#if VIEW_MODE="edit_appleIDs"#]
- <a class="btn btn-defaul btn-primary" href="?">&lt;&lt;&lt; <#LANG_BACK#></a>
-   [#if ID!=""#]
-   [#if APPLEID!=""#]<h4>[#APPLEID#]</h4>[#endif APPLEID#]
-<ul class="nav nav-tabs">
-  <li[#if TAB=""#] class="active"[#endif#]>
-   <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab="><#LANG_GENERAL#></a>
-  </li>
-  <li[#if TAB="data"#] class="active"[#endif#]>
-   <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab=data">&#060#LANG_DATA#&#062</a>
-  </li>
-</ul>
-&nbsp;<br/>
-   [#endif ID#]
-   [#if TAB=""#]
-    [#inc appleIDs_edit_default.html#]
-   [#endif TAB#]
-   [#if TAB="data"#]
-    [#inc appleIDs_edit_data.html#]
-   [#endif TAB#]
- [#endif VIEW_MODE#]
- <!-- / table appleIDs edit -->
- <!-- table appleIDs view --> 
- [#if VIEW_MODE="view_appleIDs"#]
-   [#if TAB=""#]
-    [#inc appleIDs_view_default.html#]
-   [#endif TAB#]
- [#endif VIEW_MODE#]
- <!-- / table appleIDs view -->
- [#endif DATA_SOURCE#]
- <!-- action usual -->
- [#if DATA_SOURCE="idevices"#]
- <!-- table idevices search -->
+<!-- table devices search -->
  [#if VIEW_MODE="search_idevices" || VIEW_MODE=""#]
-  [#inc idevices_search_admin.html#]
+  [#inc search_admin.html#]
  [#endif VIEW_MODE#]
- <!-- / table idevices search -->
- <!-- table idevices edit -->
- [#if VIEW_MODE="edit_idevices"#]
-   [#inc idevices_edit.html#]
- [#endif VIEW_MODE#]
- <!-- / table idevices edit -->
- <!-- table idevices view --> 
- [#if VIEW_MODE="view_idevices"#]
-   [#inc idevices_view.html#]
- [#endif VIEW_MODE#]
- <!-- / table idevices view -->
- [#endif DATA_SOURCE#]
+
+<!-- table li edit -->
+[#if VIEW_MODE="device_edit"#]
+  <a class="btn btn-defaul btn-primary" href="?">&lt;&lt;&lt; <#LANG_BACK#></a>
+  [#inc device_edit.html#]
+[#endif VIEW_MODE#]
+[#if VIEW_MODE="appleid_edit"#]
+  <a class="btn btn-defaul btn-primary" href="?tab=appleids">&lt;&lt;&lt; <#LANG_BACK#></a>
+  [#inc appleid_edit.html#]
+[#endif VIEW_MODE#]
+
+[#endif DATA_SOURCE#]

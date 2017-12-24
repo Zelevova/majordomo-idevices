@@ -13,17 +13,19 @@ include_once(DIR_MODULES . 'idevices/idevices.class.php');
 $idevices_module = new idevices();
 $idevices_module->getConfig();
 $tmp = SQLSelectOne("SELECT ID FROM appleIDs LIMIT 1");
-if (!$tmp['ID'])
-   exit; // no devices added -- no need to run this cycle
+if (!$tmp['ID']){
+  $idevices_module->debug('Нет записей о AppleID, нечего делать.');
+  exit; // no devices added -- no need to run this cycle
+}
 echo date("H:i:s") . " running " . basename(__FILE__) . PHP_EOL;
+$idevices_module->debug("Running " . str_replace('.php', '', basename(__FILE__)) . PHP_EOL);
 $latest_check=0;
-$checkEvery=21; // poll every 5 seconds
+$checkEvery=21; // poll every 21 seconds
 while (1)
 {
    setGlobal((str_replace('.php', '', basename(__FILE__))) . 'Run', time(), 1);
    if ((time()-$latest_check)>$checkEvery) {
     $latest_check=time();
-    echo date('Y-m-d H:i:s').' Polling devices...';
     $idevices_module->processCycle();
    }
    if (file_exists('./reboot') || IsSet($_GET['onetime']))

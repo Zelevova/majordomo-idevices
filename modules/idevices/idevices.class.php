@@ -113,6 +113,22 @@ function run() {
   $p=new parser(DIR_TEMPLATES.$this->name."/".$this->name.".html", $this->data, $this);
   $this->result=$p->result;
 }
+
+  function debug($content) {
+    if($this->config['DEBUG'])
+      $this->log(print_r($content,true));
+  }
+
+  function log($message) {
+    // DEBUG MESSAGE LOG
+    if(!is_dir(ROOT . 'debmes')) {
+      mkdir(ROOT . 'debmes', 0777);
+    }
+    $today_file = ROOT . 'debmes/log_' . date('Y-m-d') . '_idevices.php.txt';
+    $data = date("H:i:s")." " . $message . "\n";
+    file_put_contents($today_file, $data, FILE_APPEND | LOCK_EX);
+  }
+  
 /**
 * BackEnd
 *
@@ -121,33 +137,140 @@ function run() {
 * @access public
 */
 function admin(&$out) {
- if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
-  $out['SET_DATASOURCE']=1;
- }
- if ($this->data_source=='appleIDs' || $this->data_source=='') {
-  if ($this->view_mode=='' || $this->view_mode=='search_appleIDs') {
-   $this->search_appleIDs($out);
+  $this->getConfig();
+  global $ajax;
+  global $filter;
+  global $limit;
+  if($ajax) {
+    header("HTTP/1.0: 200 OK\n");
+    header('Content-Type: text/html; charset=utf-8');
+    // Find last midifed
+    $filename = ROOT . 'debmes/log_*_idevices.php.txt';
+    foreach(glob($filename) as $file) {
+      $LastModified[] = filemtime($file);
+      $FileName[] = $file;
+    }
+    $files = array_multisort($LastModified, SORT_NUMERIC, SORT_ASC, $FileName);
+    $lastIndex = count($LastModified) - 1;
+    // Open file
+    $data = LoadFile($FileName[$lastIndex]);
+    $lines = explode("\n", $data);
+    $lines = array_reverse($lines);
+    $res_lines = array();
+    $total = count($lines);
+    $added = 0;
+    for($i = 0; $i < $total; $i++) {
+      if(trim($lines[$i]) == '') {
+        continue;
+      }
+      if($filter && preg_match('/' . preg_quote($filter) . '/is', $lines[$i])) {
+        $res_lines[] = $lines[$i];
+        $added++;
+      } elseif(!$filter) {
+        $res_lines[] = $lines[$i];
+        $added++;
+      }
+      if($added >= $limit) {
+        break;
+      }
+    }
+    echo implode("<br/>", $res_lines);
+    exit;
   }
-  if ($this->view_mode=='edit_appleIDs') {
-   $this->edit_appleIDs($out, $this->id);
+
+  global $sendMessage;
+  if ($sendMessage)
+  {
+    header("HTTP/1.0: 200 OK\n");
+    header('Content-Type: text/html; charset=utf-8');
+    global $device_id;
+    global $message;
+    global $subject;
+    global $sound;
+    $res = $this->sendMessage($device_id, $message, $subject, $sound);
+    echo $res;
+    exit;
   }
-  if ($this->view_mode=='delete_appleIDs') {
-    $this->delete_appleIDs($this->id);
-    $this->redirect("?data_source=appleIDs");
+  global $playSound;
+  if ($playSound)
+  {
+    header("HTTP/1.0: 200 OK\n");
+    header('Content-Type: text/html; charset=utf-8');
+    global $device_id;
+    $res = $this->playSound($device_id);
+    echo $res;
+    exit;
   }
- }
- if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
-  $out['SET_DATASOURCE']=1;
- }
- if ($this->data_source=='idevices') {
-  if ($this->view_mode=='' || $this->view_mode=='search_idevices') {
-   $this->search_idevices($out);
+  global $locate;
+  if ($locate)
+  {
+    header("HTTP/1.0: 200 OK\n");
+    header('Content-Type: text/html; charset=utf-8');
+    global $device_id;
+    $res = $this->locate($device_id);
+    echo $res;
+    exit;
   }
-  if ($this->view_mode=='edit_idevices') {
-   $this->edit_idevices($out, $this->id);
+  global $lock;
+  if ($lock)
+  {
+    header("HTTP/1.0: 200 OK\n");
+    header('Content-Type: text/html; charset=utf-8');
+    global $device_id;
+    global $text;
+    global $name;
+    $res = $this->lock($device_id,$text);
+    echo $res;
+    exit;
   }
- }
+  global $getDevices;
+  if ($getDevices)
+  {
+    header("HTTP/1.0: 200 OK\n");
+    header('Content-Type: text/html; charset=utf-8');
+    global $appleid;
+    $res = $this->getDevices($appleid);
+    echo $res;
+    exit;
+  }
+  
+  $out['DEBUG'] = $this->config['DEBUG'];
+  if($this->data_source == 'idevices' || $this->data_source == '') {
+    if($this->view_mode == 'update_settings') {
+      global $debug;
+      $this->config['DEBUG'] = $debug;
+      $this->saveConfig();
+      $this->log("Save config");
+      setGlobal('cycle_telegram','restart');
+      $this->log("Init cycle restart");
+      $this->redirect("?tab=".$this->tab);
+    }
+    if($this->view_mode == 'appleid_edit') {
+      $this->edit_appleid($out, $this->id);
+    }
+    if($this->view_mode == 'device_edit') {
+      $this->edit_device($out, $this->id);
+    }
+    if($this->view_mode == 'appleid_delete') {
+      $this->delete_appleid($this->id);
+      $this->redirect("?tab=appleids");
+    }
+    if($this->view_mode == 'device_delete') {
+      $this->delete_device($this->id);
+      $this->redirect("?");
+    }
+    if($this->view_mode == '' || $this->view_mode == 'search_ms') {
+      if($this->tab == 'appleids') {
+        $this->idevices_appleids($out);
+      } else if($this->tab == 'log') {
+        $this->idevices_log($out);
+      } else {
+        $this->idevices_devices($out);
+      }
+    }
+  }
 }
+  
 /**
 * FrontEnd
 *
@@ -158,64 +281,173 @@ function admin(&$out) {
 function usual(&$out) {
  $this->admin($out);
 }
-/**
-* appleIDs search
-*
-* @access public
-*/
- function search_appleIDs(&$out) {
-  require(DIR_MODULES.$this->name.'/appleIDs_search.inc.php');
- }
 
- function scan($id) {
-  require(DIR_MODULES.$this->name.'/scan.inc.php');
- }
+  /**
+   * Edit/add
+   *
+   * @access public
+   */
+  function edit_appleid(&$out, $id) {
+    require(DIR_MODULES . $this->name . '/appleid_edit.inc.php');
+  }
+  function edit_device(&$out, $id) {
+    require(DIR_MODULES . $this->name . '/device_edit.inc.php');
+  }
+  
+  function idevices_devices(&$out) {
+    require(DIR_MODULES . $this->name . '/idevices_devices.inc.php');
+  }
+  function idevices_log(&$out) {
+    require(DIR_MODULES . $this->name . '/idevices_log.inc.php');
+  }
+  function idevices_appleids(&$out) {
+    require(DIR_MODULES . $this->name . '/idevices_appleids.inc.php');
+  }
+  
+  /**
+   * device record
+   *
+   * @access public
+   */
+  function delete_device($id) {
+    $rec = SQLSelectOne("SELECT * FROM idevices WHERE ID='$id'");
+    // some action for related tables
+    SQLExec("DELETE FROM idevices WHERE ID='" . $rec['ID'] . "'");
+  }
+  function delete_appleid($id) {
+    $rec=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='$id'");
+    // some action for related tables
+    SQLExec("DELETE FROM idevices WHERE APPLEID='".$rec['APPLEID']."'");
+    SQLExec("DELETE FROM appleIDs WHERE ID='".$rec['ID']."'");
+  }
+  
 
-/**
-* appleIDs edit/add
-*
-* @access public
-*/
- function edit_appleIDs(&$out, $id) {
-  require(DIR_MODULES.$this->name.'/appleIDs_edit.inc.php');
- }
-/**
-* appleIDs delete record
-*
-* @access public
-*/
- function delete_appleIDs($id) {
-  $rec=SQLSelectOne("SELECT * FROM appleIDs WHERE ID='$id'");
-  SQLExec("DELETE FROM idevices WHERE APPLEID='".$rec['APPLEID']."'");
-  SQLExec("DELETE FROM appleIDs WHERE ID='".$rec['ID']."'");
- }
-/**
-* idevices search
-*
-* @access public
-*/
- function search_idevices(&$out) {
-  require(DIR_MODULES.$this->name.'/idevices_search.inc.php');
- }
-/**
-* idevices edit/add
-*
-* @access public
-*/
- function edit_idevices(&$out, $id) {
-  require(DIR_MODULES.$this->name.'/idevices_edit.inc.php');
- }
- function propertySetHandle($object, $property, $value) {
-   $table='idevices';
-   $properties=SQLSelect("SELECT ID FROM $table WHERE LINKED_OBJECT LIKE '".DBSafe($object)."' AND LINKED_PROPERTY LIKE '".DBSafe($property)."'");
-   $total=count($properties);
-   if ($total) {
-    for($i=0;$i<$total;$i++) {
-     //to-do
+  function sendMessage($device_id, $message, $subject ='from majordomo', $sound = false) {
+    if($message == "") {
+      return 0;
     }
-   }
- }
- function processSubscription($event, $details='') {
+    set_time_limit(600);
+    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $this->debug('<pre>sendMessage: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>message: '.$message.'</br>subject: '.$subject.'</br>sound: '.$sound.'</pre>');
+    require_once('FindMyiPhone.php');
+    try {
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
+      $FindMyiPhone->sendMessage($device['DEVICE_ID'], $message, (bool)$sound, $subject);
+    } catch (exception $e) {
+    $this->debug($e->getMessage());
+  }
+  return "Message sended";
+
+  }
+  
+  function playSound($device_id, $message='') {
+    set_time_limit(600);
+    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $this->debug('<pre>playSound: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  message: '.$message.'</pre>');
+    require_once('FindMyiPhone.php');
+    try {
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
+      $FindMyiPhone->playSound($device['DEVICE_ID'], $message);
+    } catch (exception $e) {
+      $this->debug($e->getMessage());
+    }
+    return "Sound played";
+  }
+  
+  function locate($device_id){
+    set_time_limit(0);
+    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $this->debug('<pre>locate: '.$device['NAME'].'</br>  device_id: '.$device_id.'</pre>');
+    require_once('FindMyiPhone.php');
+    try {
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
+      $location =  $FindMyiPhone->locate($device['DEVICE_ID'], 180);
+      if($location->horizontalAccuracy > 1000)
+        $location =  $FindMyiPhone->locate($device['DEVICE_ID'], 180);
+      $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($device['APPLEID'])."' AND DEVICE_ID='".DBSafe($device['DEVICE_ID'])."'");
+      $prop['NAME'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->name;
+      $prop['DEVICE_ID'] = $device['DEVICE_ID'];
+      $prop['APPLEID'] = $device['APPLEID'];
+      $prop['BATTERY_LEVEL'] = round($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100, 2);
+      $prop['BATTERY_STATUS'] = ($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryStatus == "Charging") ? 1 : 0;
+      $prop['ACCURACY'] = $location->horizontalAccuracy;
+      $prop['LATITUDE'] = $location->latitude;
+      $prop['LONGITUDE'] = $location->longitude;
+      $prop['UPDATED']=date('Y-m-d H:i:s');
+      SQLUpdateInsert('idevices', $prop);
+      if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
+        $url = BASE_URL . '/gps.php?latitude=' . $prop['LATITUDE']
+        . '&longitude=' . $prop['LONGITUDE']
+        . '&altitude=' . 0
+        . '&accuracy=' . $prop['ACCURACY']
+        . '&provider=' . ''
+        . '&speed=' . 0
+        . '&battlevel=' . $prop['BATTERY_LEVEL']
+        . '&charging=' . $prop['BATTERY_STATUS']
+        . '&deviceid=' . $prop['NAME'];
+        getURL($url, 0);
+      }
+      
+    } catch (exception $e) {
+      $this->debug($e->getMessage());
+    }
+    return "Device located";
+  }
+  
+  function lock($device_id, $text) {
+    set_time_limit(0);
+    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $this->debug('<pre>lock: '.$device['NAME'].'</br>  text: '.$text.'</pre>');
+    // todo
+    return "device locked";
+  }
+  
+  function getDevices($appleid){
+    set_time_limit(0);
+    $record=SQLSelectOne("SELECT * FROM appleIDs WHERE APPLEID='".DBSafe($appleid)."'");
+    $this->debug('getDevices: '.$appleid);
+    require_once('FindMyiPhone.php');
+    try {
+      $FindMyiPhone = new FindMyiPhone($record['APPLEID'], $record['PASSWORD'], false);
+      $FindMyiPhone->getDevices();
+      foreach ($FindMyiPhone->devices as $device_id => $device)
+      {
+        /*
+         $location =  $FindMyiPhone->locate($device_id);
+        if($location->horizontalAccuracy > 1000)
+          $location =  $FindMyiPhone->locate($device_id);
+        */
+         $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($record['APPLEID'])."' AND DEVICE_ID='".DBSafe($device_id)."'");
+        $prop['NAME'] = $device->name;
+        $prop['DEVICE_ID'] = $device_id;
+        $prop['APPLEID'] = $record['APPLEID'];
+        //$prop['GET_LOCATION'] = 30;
+        $prop['BATTERY_LEVEL'] = round($device->batteryLevel*100, 2);
+        $prop['BATTERY_STATUS'] = ($device->batteryStatus == "Charging") ? 1 : 0;
+        /*$prop['ACCURACY'] = $location->horizontalAccuracy;
+        $prop['LATITUDE'] = $location->latitude;
+        $prop['LONGITUDE'] = $location->longitude;*/
+        $prop['UPDATED']=date('Y-m-d H:i:s');
+        SQLUpdateInsert('idevices', $prop);
+        /*if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
+          $_REQUEST['deviceid']  = $prop['NAME'];
+          $_REQUEST['battlevel'] = $prop['BATTERY_LEVEL'];
+          $_REQUEST['charging'] = $prop['BATTERY_STATUS'];
+          $_REQUEST['latitude']  = $prop['LATITUDE'];
+          $_REQUEST['longitude'] = $prop['LONGITUDE'];
+          $_REQUEST['accuracy'] = $prop['ACCURACY'];
+          include_once(ROOT.'gps.php');
+        }*/
+      }
+      unset($device);
+    } catch (exception $e) {
+      $this->debug($e->getMessage());
+
+    }
+    return "Devices got";
+  }
+ 
+function processSubscription($event, &$details) {
   if ($event=='SAY') {
    $level=$details['level'];
    $message=$details['message'];
@@ -223,12 +455,12 @@ function usual(&$out) {
   }
  }
  function processCycle() {
-  $devices = SQLSelect("SELECT NAME, APPLEID
+  $devices = SQLSelect("SELECT DEVICE_ID, APPLEID
   FROM idevices
   WHERE GET_LOCATION > 0 AND DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) <= NOW()
   ORDER BY DATE_ADD(UPDATED, INTERVAL GET_LOCATION MINUTE) - NOW()");
   foreach($devices as $device)
-    findApple($device['NAME']);
+    $this->locate($device['DEVICE_ID']);
  }
 /**
 * Install
@@ -239,6 +471,8 @@ function usual(&$out) {
 */
  function install($data='') {
   subscribeToEvent($this->name, 'SAY');
+  //subscribeToEvent($this->name, 'SAYTO', '', 10);
+  //subscribeToEvent($this->name, 'SAYREPLY', '', 10);
   parent::install();
  }
 /**
@@ -254,6 +488,8 @@ function usual(&$out) {
   if(file_exists(ROOT.'lib/idevices.php'))
     unlink(ROOT.'lib/idevices.php');
   unsubscribeFromEvent($this->name, 'SAY');
+  unsubscribeFromEvent($this->name, 'SAYTO');
+  unsubscribeFromEvent($this->name, 'SAYREPLY');
   parent::uninstall();
  }
 /**

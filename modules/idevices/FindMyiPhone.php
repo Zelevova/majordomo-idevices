@@ -354,3 +354,4 @@ class FindMyiPhoneLocation {
     public $latitude;
 
 }
+

@@ -1,0 +1,78 @@
+<!-- Table 'device' edit -->
+<br/>
+<script>
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>
+<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+[#if OK#]
+<div class="alert alert-success"><#LANG_DATA_SAVED#></div>
+[#endif OK#]
+[#if ERR#]
+<div class="alert alert-danger"><#LANG_FILLOUT_REQURED#></div>
+[#endif ERR#]
+<fieldset>
+<!-- NAME -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_NAME#>"><#LANG_DEVICE#> <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls"><input type="text" readonly name="name" value="[#NAME#]" class="form-control input"></div>
+</div>
+<!-- CHECK_INTERVAL -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_CHECK_INTERVAL#>"><#LANG_CHECK_INTERVAL#> <i class="glyphicon glyphicon-info-sign"></i></label>
+ <div class="controls"><input type="text" name="get_location" value="[#GET_LOCATION#]" class="form-control input"></div>
+</div>
+<!-- BATTERY_LEVEL -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_BATTERY_LEVEL#>"><#LANG_BATTERY_LEVEL#> <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls">
+    [#BATTERY_LEVEL#]&#37; 
+    [#if BATTERY_STATUS==1#]
+    <i class="glyphicon glyphicon-flash"></i>
+    [#endif#]</div>
+</div>
+<!-- APPLEID -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_APPLEID#>">Apple ID <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls">[#APPLEID#]</div>
+</div>
+<!-- UPDATED -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_UPDATED#>"><#LANG_UPDATED#> <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls">[#UPDATED#]</div>
+</div>
+<!-- LATITUDE -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_LATITUDE#>"><#LANG_LATITUDE#> <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls">[#LATITUDE#]</div>
+</div>
+<!-- LONGITUDE -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_LONGITUDE#>"><#LANG_LONGITUDE#> <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls">[#LONGITUDE#]</div>
+</div>
+<!-- ACCURACY -->
+<div class="form-group">
+  <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_ACCURACY#>"><#LANG_ACCURACY#> <i class="glyphicon glyphicon-info-sign"></i></label>
+  <div class="controls">[#ACCURACY#]</div>
+</div>
+
+<div class="form-actions">
+ <button type="submit" name="subm" value="<#LANG_SUBMIT#>" class="btn btn-defaul btn-primary"><#LANG_SUBMIT#></button>
+ <a href="?" class="btn btn-default"><#LANG_CANCEL#></a>
+<input type="hidden" name="id" value="<#ID#>">
+<input type="hidden" id="appleid" name="users_id" value="<#APPLEID#>">
+<input type="hidden" name="view_mode" value="<#VIEW_MODE#>">
+<input type="hidden" name="edit_mode" value="<#EDIT_MODE#>">
+<input type="hidden" name="mode" value="update">
+<input type="hidden" name="data_source" value="<#DATA_SOURCE#>">
+<input type="hidden" name="tab" value="<#TAB#>">
+</div>
+</fieldset>
+</form>
+<br/>
+[#if LATITUDE!='' and LONGITUDE!=''#]
+<img src="http://maps.googleapis.com/maps/api/staticmap?center=[#LATITUDE#],[#LONGITUDE#]&amp;size=512x512&amp;maptype=hybrid&amp;sensor=false&amp;zoom=14&amp;markers=[#LATITUDE#],[#LONGITUDE#]" border="0">
+[#endif#]
+<hr/>
