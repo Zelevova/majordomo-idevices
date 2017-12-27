@@ -115,6 +115,7 @@ function run() {
 }
 
   function debug($content) {
+    $this->getConfig();
     if($this->config['DEBUG'])
       $this->log(print_r($content,true));
   }
@@ -323,9 +324,9 @@ function usual(&$out) {
   
   function setCheckInterval($device_id, $interval = 0) {
     $device = SQLSelectOne("SELECT ID, NAME FROM idevices WHERE DEVICE_ID = '".DBSafe($device_id)."' OR NAME = '".DBSafe($device_id)."'");
+    $this->debug('<pre>setCheckInterval: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>interval: '.$interval.'</pre>');
     $device['GET_LOCATION'] = $interval;
     SQLUpdate('idevices', $device);
-    $this->debug('<pre>setCheckInterval: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>interval: '.$interval.'</pre>');
     return $interval;
   }
   
