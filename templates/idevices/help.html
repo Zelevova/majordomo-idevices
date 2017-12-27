@@ -25,7 +25,7 @@
 		<a data-toggle="collapse" data-parent="#accordion" href="#devices_help">Информация об устройствах</a>
 		</div>
 		<div class="panel-body collapse" id="devices_help">
-      <p>На вкладке "Устройства" можно задать "Интервал проверки" местоположения и выполнить следующие действия:</p>
+      <p>На вкладке "Устройства" можно увидеть текущую информацию о устройствах, задать "Интервал проверки" местоположения и выполнить следующие действия:</p>
       <ul>
         <li><i class="glyphicon glyphicon-envelope"></i> - отправить сообщение</li>
         <li><i class="glyphicon glyphicon-volume-up"></i> - воспроизвести звук</li>
@@ -45,27 +45,29 @@
     <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
       $idevices_module = new idevices();<br>
       $idevices_module->sendMessage($name, $message[, $subject, $sound]);</code></p>
-    
     <p><b>Для отправки звуковых оповещений</b><br>
     <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
       $idevices_module = new idevices();<br>
       $idevices_module->playSound($name[, $message]);</code></p>
-    <!--
     <p><b>Для определения местоположения устройств</b><br>
     <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
       $idevices_module = new idevices();<br>
       $idevices_module->locate($name);</code></p>
-
     <p><b>Для блокировки устройств</b><br>
+    В разработке:
+    <s><code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
+      $idevices_module = new idevices();<br>
+      $idevices_module->lock($name, $message, $phoneNumber);</code></p>
+    </s>
+    <p><b>Для изменения интервала опроса устройств</b><br>
     <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
       $idevices_module = new idevices();<br>
-      $idevices_module->lock($name, $message, $phoneNumber = "");</code></p>
-    -->
+      $idevices_module->setCheckInterval($name[, $interval]);</code></p>
     <p><b>СЛЕДУЮЩИЙ КОД ЕЩЕ РАБОТОСПОСОБЕН,</br> НО СО ВРЕМЕНЕМ БУДЕТ ВЫВОДИТЬСЯ ИЗ УПОТРЕБЛЕНИЯ.</br> РЕКОМЕНДУЮ ЗАМЕНИТЬ НА КОД ВЫШЕ!</br></b>
     <code><s>messageToApple($name, $message[, $sound, $subject])</s></br>
       <s>soundToApple($name[, $subject])</s></br>
       <s>lockToApple($name, $message[, $phoneNumber])</s></br>
-      <s>findApple($name)</s></br></code></p>
+      <s>findApple($name)</s></code></p>
     </div>
 	</div>
 </div>
