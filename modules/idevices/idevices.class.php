@@ -246,7 +246,7 @@ function admin(&$out) {
       $this->config['PAGINATION'] = $pagination;
       $this->saveConfig();
       $this->log("Save config");
-      setGlobal('cycle_telegram','restart');
+      setGlobal('cycle_idevices','restart');
       $this->log("Init cycle restart");
       $this->redirect("?tab=".$this->tab);
     }
