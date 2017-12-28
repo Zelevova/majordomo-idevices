@@ -3,6 +3,9 @@
 [#if RESULT#]
 <script type="text/javascript">
   function sendMessage(name, device_id){
+	//TODO: Сделать нормальное модальное окно, с возможностью отправлять сообщение с заголовком и со звуком
+	var subject = '';
+	var sound = '';
     var message = prompt("Input text message:", '');
     if (message == null) return;
     var url="?sendMessage=1&device_id="+device_id+"&message="+message+"&subject="+subject+"&sound="+sound;

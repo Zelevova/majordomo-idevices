@@ -236,10 +236,14 @@ function admin(&$out) {
   }
   
   $out['DEBUG'] = $this->config['DEBUG'];
+  $out['PAGINATION'] = $this->config['PAGINATION'] > 0 ? $this->config['PAGINATION'] : 3;
+  
   if($this->data_source == 'idevices' || $this->data_source == '') {
     if($this->view_mode == 'update_settings') {
       global $debug;
       $this->config['DEBUG'] = $debug;
+      global $pagination;
+      $this->config['PAGINATION'] = $pagination;
       $this->saveConfig();
       $this->log("Save config");
       setGlobal('cycle_telegram','restart');
@@ -385,15 +389,15 @@ function usual(&$out) {
       $prop['UPDATED']=date('Y-m-d H:i:s');
       SQLUpdateInsert('idevices', $prop);
       if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
-        $url = BASE_URL . '/gps.php?latitude=' . $prop['LATITUDE']
-        . '&longitude=' . $prop['LONGITUDE']
+      	$url = BASE_URL . '/gps.php?latitude=' . str_replace(',', '.', $prop['LATITUDE'])
+        . '&longitude=' . str_replace(',', '.', $prop['LONGITUDE'])
         . '&altitude=' . 0
         . '&accuracy=' . $prop['ACCURACY']
         . '&provider=' . ''
         . '&speed=' . 0
         . '&battlevel=' . $prop['BATTERY_LEVEL']
         . '&charging=' . $prop['BATTERY_STATUS']
-        . '&deviceid=' . $prop['NAME'];
+        . '&deviceid=' . urlencode($prop['NAME']);
         getURL($url, 0);
       }
       
