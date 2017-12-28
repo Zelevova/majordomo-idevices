@@ -72,7 +72,7 @@ function findApple($name, $timeout = 60) {
           . '&speed=' . 0
           . '&battlevel=' . $prop['BATTERY_LEVEL']
           . '&charging=' . $prop['BATTERY_STATUS']
-          . '&deviceid=' . $prop['NAME'];
+          . '&deviceid=' . urlencode($prop['NAME']);
         getURL($url, 0);
       }
     }

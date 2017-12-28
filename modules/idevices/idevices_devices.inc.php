@@ -39,6 +39,7 @@
     $total=count($res);
     for($i=0;$i<$total;$i++) {
      // some action for every record if required
+     $res[$i]['DEVICE_ID'] = urlencode($res[$i]['DEVICE_ID']);
     }
     $out['RESULT']=$res;
   }  
