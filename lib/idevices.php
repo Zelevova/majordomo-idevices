@@ -64,8 +64,8 @@ function findApple($name, $timeout = 60) {
       $prop['UPDATED']=date('Y-m-d H:i:s');
       SQLUpdateInsert('idevices', $prop);
       if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
-        $url = BASE_URL . '/gps.php?latitude=' . $prop['LATITUDE']
-          . '&longitude=' . $prop['LONGITUDE']
+      	$url = BASE_URL . '/gps.php?latitude=' . str_replace(',', '.', $prop['LATITUDE'])
+      	  . '&longitude=' . str_replace(',', '.', $prop['LONGITUDE'])
           . '&altitude=' . 0
           . '&accuracy=' . $prop['ACCURACY']
           . '&provider=' . ''
