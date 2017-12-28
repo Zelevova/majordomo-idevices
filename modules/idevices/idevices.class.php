@@ -236,10 +236,14 @@ function admin(&$out) {
   }
   
   $out['DEBUG'] = $this->config['DEBUG'];
+  $out['PAGINATION'] = $this->config['PAGINATION'] > 0 ? $this->config['PAGINATION'] : 3;
+  
   if($this->data_source == 'idevices' || $this->data_source == '') {
     if($this->view_mode == 'update_settings') {
       global $debug;
       $this->config['DEBUG'] = $debug;
+      global $pagination;
+      $this->config['PAGINATION'] = $pagination;
       $this->saveConfig();
       $this->log("Save config");
       setGlobal('cycle_telegram','restart');

@@ -9,6 +9,7 @@ $dictionary=array(
 'ABOUT' => 'О модуле',
 'DEBUG' => 'Отладка',
 'CLOSE' => 'Закрыть',
+'PAGINATION' => 'Кол-во объектов на странице',
 
 'HELP' => 'Помощь',
 'HELP_APPLEID' =>'Ваш Apple ID',

@@ -34,7 +34,7 @@
   // SEARCH RESULTS  
   $res=SQLSelect("SELECT * FROM idevices ORDER BY ".$sortby_device);
   if ($res[0]['ID']) {  
-    paging($res, 3, $out); // search result paging
+  	paging($res, intval($this->config['PAGINATION']), $out); // search result paging
     colorizeArray($res);
     $total=count($res);
     for($i=0;$i<$total;$i++) {

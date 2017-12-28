@@ -9,6 +9,7 @@ $dictionary=array(
 'ABOUT' => 'About',
 'HELP' => 'Help',
 'DEBUG' => 'Debug',
+'PAGINATION' => 'Pagination',
 'CLOSE' => 'Close',
                   'HELP_APPLEID' =>'Apple ID',
 'HELP_PASSWORD' =>'Password',
