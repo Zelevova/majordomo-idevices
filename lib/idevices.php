@@ -1,84 +1,29 @@
 <?php
-
-function messageToApple($name, $message, $sound = true, $subject = "") {
-  if($message == "") {
-    return 0;
+  
+  function messageToApple($name, $message, $sound = true, $subject = "") {
+    if($message == "")
+      return 0;
+    include_once(DIR_MODULES . 'idevices/idevices.class.php');
+    $idevices_module = new idevices();
+    $idevices_module->sendMessage($name, $message, $subject, $sound);
   }
-  require_once(ROOT.'modules/idevices/FindMyiPhone.php');
-  try {
-    $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$name."'");
-    foreach($devices as $device) {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
-      $FindMyiPhone->sendMessage($device['DEVICE_ID'], $message, (bool)$sound, $subject);
-    }
-  } catch (exception $e) {
-    registerError('idevices', 'ERROR: ' . $e->getMessage());
+  
+  function soundToApple($name, $message = "") {
+    include_once(DIR_MODULES . 'idevices/idevices.class.php');
+    $idevices_module = new idevices();
+    $idevices_module->playSound($name, $message]);
   }
-}
-
-function soundToApple($name, $subject = "") {
-  require_once(ROOT.'modules/idevices/FindMyiPhone.php');
-  try {
-    $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$name."'");
-    foreach($devices as $device) {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
-      $FindMyiPhone->playSound($device['DEVICE_ID'], $subject);
-    }
-  } catch (exception $e) {
-    registerError('idevices', 'ERROR: ' . $e->getMessage());
+  
+  function lockToApple($name, $message, $phoneNumber = "") {
+    include_once(DIR_MODULES . 'idevices/idevices.class.php');
+    $idevices_module = new idevices();
+    $idevices_module->lostMode($name, $message, $phoneNumber);
   }
-}
-
-function lockToApple($name, $message, $phoneNumber = "") {
-  require_once(ROOT.'modules/idevices/FindMyiPhone.php');
-  try {
-    $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$name."'");
-    foreach($devices as $device) {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
-      $FindMyiPhone->lostMode($device['DEVICE_ID'], $message, $phoneNumber);
-    }
-  } catch (exception $e) {
-    registerError('idevices', 'ERROR: ' . $e->getMessage());
+  
+  function findApple($name, $timeout = 0) {
+    include_once(DIR_MODULES . 'idevices/idevices.class.php');
+    $idevices_module = new idevices();
+    $idevices_module->locate($name);
   }
-}
-
-function findApple($name, $timeout = 60) {
-  require_once(ROOT.'modules/idevices/FindMyiPhone.php');
-  try {
-    set_time_limit(6000);
-    $devices = SQLSelect("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND idevices.NAME =  '".$name."'");
-    foreach($devices as $device) {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], false);
-      $location =  $FindMyiPhone->locate($device['DEVICE_ID']);
-      if($location->horizontalAccuracy > 1000)
-        $location =  $FindMyiPhone->locate($device['DEVICE_ID']);
-      $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($device['APPLEID'])."' AND DEVICE_ID='".DBSafe($device['DEVICE_ID'])."'");
-      $prop['NAME'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->name;
-      $prop['DEVICE_ID'] = $device['DEVICE_ID'];
-      $prop['APPLEID'] = $device['APPLEID'];
-      $prop['BATTERY_LEVEL'] = round($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100, 2);
-      $prop['BATTERY_STATUS'] = ($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryStatus == "NotCharging") ? 0 : 1;
-      $prop['ACCURACY'] = $location->horizontalAccuracy;
-      $prop['LATITUDE'] = $location->latitude;
-      $prop['LONGITUDE'] = $location->longitude;
-      $prop['UPDATED']=date('Y-m-d H:i:s');
-      SQLUpdateInsert('idevices', $prop);
-      if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
-      	$url = BASE_URL . '/gps.php?latitude=' . str_replace(',', '.', $prop['LATITUDE'])
-      	  . '&longitude=' . str_replace(',', '.', $prop['LONGITUDE'])
-          . '&altitude=' . 0
-          . '&accuracy=' . $prop['ACCURACY']
-          . '&provider=' . ''
-          . '&speed=' . 0
-          . '&battlevel=' . $prop['BATTERY_LEVEL']
-          . '&charging=' . $prop['BATTERY_STATUS']
-          . '&deviceid=' . urlencode($prop['NAME']);
-        getURL($url, 0);
-      }
-    }
-  } catch (exception $e) {
-    registerError('idevices', 'ERROR: ' . $e->getMessage());
-  }
-}
-
+  
 ?>

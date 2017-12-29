@@ -1,5 +1,4 @@
 [#if ACTION!="context"#]
- 
 <table border="1" align="center" cellspacing="3" cellpadding="5" width="100%">
   <tr>
     <td valign="top" colspan=7>
@@ -10,11 +9,11 @@
               Lines:
               <select name="limit" id='limit' onChange="checkAllStates();">
                 <option>50
-                  <option>100
-                    <option>200
-                      <option>500
-                        <option>1000
-                          </select>
+                <option>100
+                <option>200
+                <option>500
+                <option>1000
+              </select>
             </div>
           </td>
           <td valign="top" width="50%">
@@ -44,23 +43,23 @@
     }
     return false;
   }
-function checkAllStates() {
-  playingXray=1;
-  clearTimeout(checkTimer);
-  var url="?ajax=1&op=getcontent&view_mode=<#VIEW_MODE#>&filter="+encodeURIComponent($('#filter').val())+"&limit="+$('#limit').val();
-  $.ajax({
-         url: url,
-         }).done(function(data) {
-                 $('#xrayContent').html(data);
-                 checkTimer=setTimeout('checkAllStates()', 5000);
-                 });
-                 return false;
-}
-checkAllStates();
-  </script>
- [#endif ACTION#]
+  function checkAllStates() {
+    playingXray=1;
+    clearTimeout(checkTimer);
+    var url="?ajax=1&op=getcontent&view_mode=<#VIEW_MODE#>&filter="+encodeURIComponent($('#filter').val())+"&limit="+$('#limit').val();
+    $.ajax({
+      url: url,
+    }).done(function(data) {
+      $('#xrayContent').html(data);
+        checkTimer=setTimeout('checkAllStates()', 5000);
+      });
+    return false;
+  }
+  checkAllStates();
+</script>
+[#endif ACTION#]
  
- [#if ACTION="context"#]
+[#if ACTION="context"#]
 <b>Related: <#LANG_HCB#>related<#LANG_HCE#></b>
 <div id='contextBody'>...</div>
 <script language="javascript">
@@ -69,13 +68,13 @@ checkAllStates();
     var bodyText='';
     [#if CODE_ID!=""#]bodyText=$('#[#CODE_ID#]').val();[#endif CODE_ID#]
     $.post(url,
-           { action:"context", ajax: "1", op: "process", keyword: "<#KEYWORD#>", type: "<#TYPE#>", body: bodyText},
-           function(data) {
-           $('#contextBody').html(data);
-           }
-           );
-           return false;
+      { action:"context", ajax: "1", op: "process", keyword: "<#KEYWORD#>", type: "<#TYPE#>", body: bodyText},
+        function(data) {
+          $('#contextBody').html(data);
+        }
+      );
+    return false;
   }
-findContext();
-  </script>
- [#endif ACTION#]
+  findContext();
+</script>
+[#endif ACTION#]

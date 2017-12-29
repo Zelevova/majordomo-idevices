@@ -34,7 +34,7 @@ class FindMyiPhone {
     private $debug;
     private $username;
     private $password;
-	private $email_updates = true;
+    private $email_updates = false;
     public $devices = array();
 
     /**

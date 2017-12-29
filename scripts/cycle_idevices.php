@@ -20,19 +20,19 @@ if (!$tmp['ID']){
 echo date("H:i:s") . " running " . basename(__FILE__) . PHP_EOL;
 $idevices_module->debug("Running " . str_replace('.php', '', basename(__FILE__)) . PHP_EOL);
 $latest_check=0;
-$checkEvery=21; // poll every 21 seconds
+$checkEvery=5; // poll every 5 seconds
 while (1)
 {
-   setGlobal((str_replace('.php', '', basename(__FILE__))) . 'Run', time(), 1);
-   if ((time()-$latest_check)>$checkEvery) {
+  setGlobal((str_replace('.php', '', basename(__FILE__))) . 'Run', time(), 1);
+  if ((time()-$latest_check)>$checkEvery) {
     $latest_check=time();
     $idevices_module->processCycle();
-   }
-   if (file_exists('./reboot') || IsSet($_GET['onetime']))
-   {
-      $db->Disconnect();
-      exit;
-   }
-   sleep(1);
+  }
+  if (file_exists('./reboot') || IsSet($_GET['onetime']))
+  {
+    $db->Disconnect();
+    exit;
+  }
+  sleep(1);
 }
 DebMes("Unexpected close of cycle: " . basename(__FILE__));
