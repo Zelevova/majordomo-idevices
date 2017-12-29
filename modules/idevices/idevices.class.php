@@ -539,8 +539,4 @@
   // --------------------------------------------------------------------
   }
 
-/*
- *
- * TW9kdWxlIGNyZWF0ZWQgQXByIDE0LCAyMDE3IHVzaW5nIFNlcmdlIEouIHdpemFyZCAoQWN0aXZlVW5pdCBJbmMgd3d3LmFjdGl2ZXVuaXQuY29tKQ==
- *
- */
+?>
