@@ -1,30 +1,30 @@
 <br/>
 <div class="panel-group" id="accordion">
-	
-  <div class="panel panel-info">
-		<div class="panel-heading">
-		<a data-toggle="collapse" data-parent="#accordion" href="#device_help">Настройка устройства</a>
-		</div>
-		<div class="panel-body collapse" id="device_help">
-		<p>Для работы модуля необходимо <a href="https://support.apple.com/ru-ru/HT205362#findmyios" target="_blank">настроить службу «Найти iPhone»</a> на устройстве с которым настраивается взаимодействие</p>
-		</div>
-	</div>
   
-	<div class="panel panel-info">
-		<div class="panel-heading">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <a data-toggle="collapse" data-parent="#accordion" href="#device_help">Настройка устройства</a>
+    </div>
+    <div class="panel-body collapse" id="device_help">
+      <p>Для работы модуля необходимо <a href="https://support.apple.com/ru-ru/HT205362#findmyios" target="_blank">настроить службу «Найти iPhone»</a> на устройстве с которым настраивается взаимодействие</p>
+    </div>
+  </div>
+  
+  <div class="panel panel-info">
+    <div class="panel-heading">
       <a data-toggle="collapse" data-parent="#accordion" href="#signin_help"><#LANG_AppleIDs#></a>
-		</div>
-		<div class="panel-body collapse" id="signin_help">
-		<p>Для доступа к устройствам необходимо ввести AppleID и пароли к ним на соответствующей странице.</p>
-    <p>В случае добавления нового устройства к уже введенному AppleID можно воспольщоваться кнопкой <i class="glyphicon glyphicon-refresh"></i> для обновления списка устройств привязанных к данному Apple ID.</p>
-		</div>
-	</div>
-
-	<div class="panel panel-info">
-		<div class="panel-heading">
-		<a data-toggle="collapse" data-parent="#accordion" href="#devices_help">Информация об устройствах</a>
-		</div>
-		<div class="panel-body collapse" id="devices_help">
+    </div>
+    <div class="panel-body collapse" id="signin_help">
+      <p>Для доступа к устройствам необходимо ввести AppleID и пароли к ним на соответствующей странице.</p>
+      <p>В случае добавления нового устройства к уже введенному AppleID можно воспольщоваться кнопкой <i class="glyphicon glyphicon-refresh"></i> для обновления списка устройств привязанных к данному Apple ID.</p>
+    </div>
+  </div>
+  
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <a data-toggle="collapse" data-parent="#accordion" href="#devices_help">Информация об устройствах</a>
+    </div>
+    <div class="panel-body collapse" id="devices_help">
       <p>На вкладке "Устройства" можно увидеть текущую информацию о устройствах, задать "Интервал проверки" местоположения и выполнить следующие действия:</p>
       <ul>
         <li><i class="glyphicon glyphicon-envelope"></i> - отправить сообщение</li>
@@ -33,41 +33,39 @@
         <li><i class="glyphicon glyphicon-lock"></i> - ввести устройство в режим пропажи</li>
       </ul>
     </div>
-	</div>
-
-	<div class="panel panel-info">
-		<div class="panel-heading">
-		<a data-toggle="collapse" data-parent="#accordion" href="#code_help">Вызов модуля в своих скриптах/методах</a>
-		</div>
-		<div class="panel-body collapse" id="code_help">
-		
-    <p><b>Для отправки текстовых сообщений</b><br>
-    <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
-      $idevices_module = new idevices();<br>
-      $idevices_module->sendMessage($name, $message[, $subject, $sound]);</code></p>
-    <p><b>Для отправки звуковых оповещений</b><br>
-    <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
-      $idevices_module = new idevices();<br>
-      $idevices_module->playSound($name[, $message]);</code></p>
-    <p><b>Для определения местоположения устройств</b><br>
-    <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
-      $idevices_module = new idevices();<br>
-      $idevices_module->locate($name);</code></p>
-    <p><b>Для блокировки устройств</b><br>
-    В разработке:
-    <s><code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
-      $idevices_module = new idevices();<br>
-      $idevices_module->lock($name, $message, $phoneNumber);</code></p>
-    </s>
-    <p><b>Для изменения интервала опроса устройств</b><br>
-    <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');<br>
-      $idevices_module = new idevices();<br>
-      $idevices_module->setCheckInterval($name[, $interval]);</code></p>
-    <p><b>СЛЕДУЮЩИЙ КОД ЕЩЕ РАБОТОСПОСОБЕН,</br> НО СО ВРЕМЕНЕМ БУДЕТ ВЫВОДИТЬСЯ ИЗ УПОТРЕБЛЕНИЯ.</br> РЕКОМЕНДУЮ ЗАМЕНИТЬ НА КОД ВЫШЕ!</br></b>
-    <code><s>messageToApple($name, $message[, $sound, $subject])</s></br>
-      <s>soundToApple($name[, $subject])</s></br>
-      <s>lockToApple($name, $message[, $phoneNumber])</s></br>
-      <s>findApple($name)</s></code></p>
+  </div>
+  
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <a data-toggle="collapse" data-parent="#accordion" href="#code_help">Вызов модуля в своих скриптах/методах</a>
     </div>
-	</div>
+    <div class="panel-body collapse" id="code_help">
+      <p><b>Для отправки текстовых сообщений</b></br>
+      <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
+        $idevices_module = new idevices();</br>
+        $idevices_module->sendMessage($name, $message[, $subject, $sound]);</code></p>
+      <p><b>Для отправки звуковых оповещений</b></br>
+      <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
+        $idevices_module = new idevices();</br>
+        $idevices_module->playSound($name[, $message]);</code></p>
+      <p><b>Для определения местоположения устройств</b></br>
+      <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
+        $idevices_module = new idevices();</br>
+        $idevices_module->locate($name);</code></p>
+      <p><b>Для блокировки устройств</b></br>
+      <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
+        $idevices_module = new idevices();</br>
+        $idevices_module->lostMode($name, $message, $phoneNumber);</code></p>
+      <p><b>Для изменения интервала опроса устройств</b></br>
+      <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
+        $idevices_module = new idevices();</br>
+        $idevices_module->getCheckInterval($name);</br>
+        $idevices_module->setCheckInterval($name[, $interval]);</code></p>
+      <p><b>СЛЕДУЮЩИЙ КОД ЕЩЕ РАБОТОСПОСОБЕН,</br> НО СО ВРЕМЕНЕМ БУДЕТ ВЫВОДИТЬСЯ ИЗ УПОТРЕБЛЕНИЯ.</br> РЕКОМЕНДУЮ ЗАМЕНИТЬ НА КОД ВЫШЕ!</br></b>
+      <code><s>messageToApple($name, $message[, $sound, $subject])</s></br>
+        <s>soundToApple($name[, $message])</s></br>
+        <s>lockToApple($name, $message[, $phoneNumber])</s></br>
+        <s>findApple($name)</s></code></p>
+    </div>
+  </div>
 </div>

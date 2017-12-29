@@ -1,19 +1,16 @@
- <!-- action usual -->
- [#if DATA_SOURCE="idevices" || DATA_SOURCE=""#]
-
-<!-- table devices search -->
- [#if VIEW_MODE="search_idevices" || VIEW_MODE=""#]
-  [#inc search_admin.html#]
- [#endif VIEW_MODE#]
-
-<!-- table li edit -->
-[#if VIEW_MODE="device_edit"#]
-  <a class="btn btn-defaul btn-primary" href="?">&lt;&lt;&lt; <#LANG_BACK#></a>
-  [#inc device_edit.html#]
-[#endif VIEW_MODE#]
-[#if VIEW_MODE="appleid_edit"#]
-  <a class="btn btn-defaul btn-primary" href="?tab=appleids">&lt;&lt;&lt; <#LANG_BACK#></a>
-  [#inc appleid_edit.html#]
-[#endif VIEW_MODE#]
-
+<!-- action usual -->
+[#if DATA_SOURCE="idevices" || DATA_SOURCE=""#]
+  <!-- table devices search -->
+  [#if VIEW_MODE="search_idevices" || VIEW_MODE=""#]
+    [#inc search_admin.html#]
+  [#endif VIEW_MODE#]
+  <!-- table li edit -->
+  [#if VIEW_MODE="device_edit"#]
+    <a class="btn btn-defaul btn-primary" href="?">&lt;&lt;&lt; <#LANG_BACK#></a>
+    [#inc device_edit.html#]
+  [#endif VIEW_MODE#]
+  [#if VIEW_MODE="appleid_edit"#]
+    <a class="btn btn-defaul btn-primary" href="?tab=appleids">&lt;&lt;&lt; <#LANG_BACK#></a>
+    [#inc appleid_edit.html#]
+  [#endif VIEW_MODE#]
 [#endif DATA_SOURCE#]

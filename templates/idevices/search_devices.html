@@ -3,9 +3,9 @@
 [#if RESULT#]
 <script type="text/javascript">
   function sendMessage(name, device_id){
-	//TODO: Сделать нормальное модальное окно, с возможностью отправлять сообщение с заголовком и со звуком
-	var subject = '';
-	var sound = '';
+    //TODO: Сделать нормальное модальное окно, с возможностью отправлять сообщение с заголовком и со звуком
+    var subject = '';
+    var sound = '';
     var message = prompt("Input text message:", '');
     if (message == null) return;
     var url="?sendMessage=1&device_id="+device_id+"&message="+message+"&subject="+subject+"&sound="+sound;
@@ -15,7 +15,7 @@
       success: function(html){
         alert(html);
       }
-    });  
+    });
   }
   function playSound(device_id){
     var url="?playSound=1&device_id="+device_id;
@@ -37,10 +37,11 @@
       }
     });
   }
-  function lock(name, device_id){
-    var text = prompt("Input text message:", '');
-    if (text == null) return;
-    var url="?lock=1&device_id="+device_id+"&text="+text+"&name="+name;
+  function lostMode(name, device_id){
+    var phoneNumber = '';
+    var message = prompt("Input text message:", '');
+    if (message == null) return;
+    var url="?lostMode=1&device_id="+device_id+"&message="+message+"&$phoneNumber="+$phoneNumber+"&name="+name;
     $.ajax({
       url: url,
       cache: false,
@@ -52,7 +53,7 @@
 </script>
 <!-- search results (list) -->
 <form action="?" method="post" name="frmList_telegram" style="padding:0px" class="form">
-  <table   class="table table-stripped">
+  <table class="table table-stripped">
     <thead>
       <tr>
         <th valign="top"><#LANG_UPDATED#></th>
@@ -63,10 +64,10 @@
         </th>
         <th><#LANG_BATTERY_LEVEL#></th>
         <!--
-        <th><#LANG_LATITUDE#></th>
-        <th><#LANG_LONGITUDE#></th>
-        <th><#LANG_ACCURACY#></th>
-        -->
+         <th><#LANG_LATITUDE#></th>
+         <th><#LANG_LONGITUDE#></th>
+         <th><#LANG_ACCURACY#></th>
+         -->
         <th><#LANG_CHECK_INTERVAL#></th>
         <th>
           <a href="?sortby_device=APPLEID">AppleID</a><nobr>
@@ -87,15 +88,15 @@
           &nbsp;
           [#endif#]
         </td>
-        <td>[#BATTERY_LEVEL#]&#37; 
+        <td>[#BATTERY_LEVEL#]&#37;
           [#if BATTERY_STATUS==1#]
           <i class="glyphicon glyphicon-flash"></i>
           [#endif#]
         </td>
         <!--
-        <td>[#LATITUDE#]</td>
-        <td>[#LONGITUDE#]</td>
-        <td>[#ACCURACY#]</td>
+         <td>[#LATITUDE#]</td>
+         <td>[#LONGITUDE#]</td>
+         <td>[#ACCURACY#]</td>
          -->
         <td>[#GET_LOCATION#]</td>
         <td><b>[#APPLEID#]</b></td>
@@ -104,11 +105,11 @@
             <button onclick="sendMessage('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_SEND_MESSAGE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-envelope"></i></button>
             <button onclick="playSound('[#DEVICE_ID#]');return false;" title="<#LANG_PLAY_SOUND#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-volume-up"></i></button>
             <button onclick="locate('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_LOCATE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-repeat"></i></button>
-            <button onclick="confirm('<#LANG_ARE_YOU_SURE#>');lock('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_LOCK#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-lock"></i></button>
+            <button onclick="confirm('<#LANG_ARE_YOU_SURE#>');lostMode('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_LOST_MODE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-lock"></i></button>
             <a href="?view_mode=device_edit&id=[#ID#]" class="btn btn-default btn-sm" title="<#LANG_EDIT#>"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="?view_mode=device_delete&id=[#ID#]" onClick="return confirm('<#LANG_ARE_YOU_SURE#>')" class="btn btn-default btn-sm" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-remove"></i></a>
-            [#endif ACTION#]
-            </td>
+          [#endif ACTION#]
+        </td>
       </tr>
       [#end RESULT#]
     </tbody>
@@ -131,9 +132,6 @@
 [#endif PAGES#]
 <!-- / paging -->
 [#else RESULT#]
-<p>
-<div class="alert alert-danger"><#LANG_NO_RECORDS_FOUND#></div>
-</p>
+<p><div class="alert alert-danger"><#LANG_NO_RECORDS_FOUND#></div></p>
 [#endif RESULT#]
 <!-- / results -->
-

@@ -1,11 +1,9 @@
 <!-- table idevices search -->
 <div class="float-right">
-  <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about"><#LANG_ABOUT#>&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span>
-    </button>
+  <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#about"><#LANG_ABOUT#>&nbsp;&nbsp;<span class="glyphicon glyphicon-info-sign icon-white"></span></button>
 </div>
 
 <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="about1" aria-hidden="true">
-  <!-- <div id="about" class="modal hide"> -->
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -19,15 +17,13 @@
           </a>
         </div>
         <p class="float-left"> Модуль iDevices для отслеживания устройств производства компании Apple (iPhone, iPad...) и взаимодействия с ними.<br>
-        Обсуждение модуля <a href="https://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=4930" target="_blank">здесь</a>.<br>
-        </p>
+        Обсуждение модуля <a href="https://majordomo.smartliving.ru/forum/viewtopic.php?f=5&t=4930" target="_blank">здесь</a>.<br></p>
         <hr size="1">
         <p class="float-left">
         Поддержать автора материально:
         <ul>
           <li><a href='https://connect.smartliving.ru/tasks/33.html?show_supported=1'  target="_blank">Connect</a></li>
-        </ul>
-        </p>
+        </ul></p>
         <div class="modal-footer">
           <div class="pull-left">Telegram: <a href="https://telegram.me/Zelevova" target="_blank">@Zelevova</a> ;)</div>
         </div>
@@ -72,14 +68,14 @@
 </ul>
 
 [#if TAB="devices" || TAB==""#]
-[#inc search_devices.html#]
+  [#inc search_devices.html#]
 [#endif#]
 [#if TAB="appleids"#]
-[#inc search_appleids.html#]
+  [#inc search_appleids.html#]
 [#endif#]
 [#if TAB="log"#]
-[#inc search_log.html#]
+  [#inc search_log.html#]
 [#endif#]
 [#if TAB="help"#]
-[#inc help.html#]
+  [#inc help.html#]
 [#endif#]
