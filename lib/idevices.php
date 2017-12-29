@@ -11,7 +11,7 @@
   function soundToApple($name, $message = "") {
     include_once(DIR_MODULES . 'idevices/idevices.class.php');
     $idevices_module = new idevices();
-    $idevices_module->playSound($name, $message]);
+    $idevices_module->playSound($name, $message);
   }
   
   function lockToApple($name, $message, $phoneNumber = "") {
