@@ -533,7 +533,7 @@
         idevices: LONGITUDE varchar(20) NOT NULL DEFAULT ''
         idevices: ACCURACY int(5) NOT NULL DEFAULT '0'
         idevices: UPDATED datetime
-       EOD;
+EOD;
        parent::dbInstall($data);
     }
   // --------------------------------------------------------------------
