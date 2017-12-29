@@ -29,7 +29,7 @@
   // SEARCH RESULTS  
   $res=SQLSelect("SELECT * FROM appleIDs ORDER BY ".$sortby_appleid);
   if ($res[0]['ID']) {   
-    paging($res, 10, $out); // search result paging
+    paging($res, intval($this->config['PAGINATION']), $out); // search result paging
     colorizeArray($res);
     $total=count($res);
     for($i=0;$i<$total;$i++) {
