@@ -39,7 +39,7 @@
       }
     });
   }
-  function lostMode(name, device_id){
+  /*function lostMode(name, device_id){
     //TODO: Сделать нормальное модальное окно, с вводом текста и номера телефона
     var phoneNumber = '';
     var message = prompt("Input text message:", '');
@@ -52,11 +52,11 @@
         alert(html);
       }
     });
-  }
+  }*/
 </script>
 <!-- search results (list) -->
-<form action="?" method="post" name="frmList_telegram" style="padding:0px" class="form">
-  <table class="table table-stripped">
+<form action="?" method="post" name="frmList_idevices" style="padding:0px" class="form">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th valign="top"><#LANG_UPDATED#></th>
@@ -108,7 +108,7 @@
             <button onclick="sendMessage('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_SEND_MESSAGE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-envelope"></i></button>
             <button onclick="playSound('[#DEVICE_ID#]');return false;" title="<#LANG_PLAY_SOUND#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-volume-up"></i></button>
             <button onclick="locate('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_LOCATE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-repeat"></i></button>
-            <button onclick="confirm('<#LANG_ARE_YOU_SURE#>');lostMode('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_LOST_MODE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-lock"></i></button>
+            <!--button onclick="confirm('<#LANG_ARE_YOU_SURE#>');lostMode('[#NAME#]', '[#DEVICE_ID#]');return false;" title="<#LANG_LOST_MODE#>" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-lock"></i></button-->
             <a href="?view_mode=device_edit&id=[#ID#]" class="btn btn-default btn-sm" title="<#LANG_EDIT#>"><i class="glyphicon glyphicon-pencil"></i></a>
             <a href="?view_mode=device_delete&id=[#ID#]" onClick="return confirm('<#LANG_ARE_YOU_SURE#>')" class="btn btn-default btn-sm" title="<#LANG_DELETE#>"><i class="glyphicon glyphicon-remove"></i></a>
           [#endif ACTION#]

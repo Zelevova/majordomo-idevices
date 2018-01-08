@@ -30,7 +30,6 @@
         <li><i class="glyphicon glyphicon-envelope"></i> - отправить сообщение</li>
         <li><i class="glyphicon glyphicon-volume-up"></i> - воспроизвести звук</li>
         <li><i class="glyphicon glyphicon-repeat"></i> - обновить информацию об устройстве</li>
-        <li><i class="glyphicon glyphicon-lock"></i> - ввести устройство в режим пропажи</li>
       </ul>
     </div>
   </div>
@@ -47,25 +46,16 @@
       <p><b>Для отправки звуковых оповещений</b></br>
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
-        $idevices_module->playSound($name[, $message]);</code></p>
+        $idevices_module->playSound($name[, $subject]);</code>Особенности применения: $subject может быть либо пустым и не будет выводиться, либо любым и на устройстве будет заголовок "Оповещение "Найти (iPhone|iPad...)"</p>
       <p><b>Для определения местоположения устройств</b></br>
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
         $idevices_module->locate($name);</code></p>
-      <p><b>Для блокировки устройств</b></br>
-      <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
-        $idevices_module = new idevices();</br>
-        $idevices_module->lostMode($name, $message, $phoneNumber);</code></p>
       <p><b>Для изменения интервала опроса устройств</b></br>
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
-        $idevices_module->getCheckInterval($name);</br>
-        $idevices_module->setCheckInterval($name[, $interval]);</code></p>
-      <p><b>СЛЕДУЮЩИЙ КОД ЕЩЕ РАБОТОСПОСОБЕН,</br> НО СО ВРЕМЕНЕМ БУДЕТ ВЫВОДИТЬСЯ ИЗ УПОТРЕБЛЕНИЯ.</br> РЕКОМЕНДУЮ ЗАМЕНИТЬ НА КОД ВЫШЕ!</br></b>
-      <code><s>messageToApple($name, $message[, $sound, $subject])</s></br>
-        <s>soundToApple($name[, $message])</s></br>
-        <s>lockToApple($name, $message[, $phoneNumber])</s></br>
-        <s>findApple($name)</s></code></p>
+        $idevices_module->getCheckInterval($name); // чтение</br>
+        $idevices_module->setCheckInterval($name[, $interval]); // установка</code></p>
     </div>
   </div>
 </div>

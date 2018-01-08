@@ -14,6 +14,7 @@
 require_once(DIR_MODULES . 'idevices/FindMyiPhone.php');
 
 class idevices extends module {
+  private $deep_debug = false;
   /**
    * idevices
    *
@@ -153,6 +154,7 @@ class idevices extends module {
    */
   function admin(&$out) {
     $this->getConfig();
+    $out['CYCLERUN'] = ((time() - gg('cycle_idevicesRun')) < 300 ) ? 1 : 0;
     global $ajax;
     global $filter;
     global $limit;
@@ -226,7 +228,7 @@ class idevices extends module {
       echo $res;
       exit;
     }
-    global $lostMode;
+    /*global $lostMode;
     if ($lostMode)
     {
       header("HTTP/1.0: 200 OK\n");
@@ -237,7 +239,7 @@ class idevices extends module {
       $res = $this->lostMode($device_id, $message, $phoneNumber);
       echo $res;
       exit;
-    }
+    }*/
     global $getDevices;
     if ($getDevices)
     {
@@ -260,8 +262,6 @@ class idevices extends module {
         $this->config['PAGINATION'] = $pagination;
         $this->saveConfig();
         $this->log("Save config");
-        setGlobal('cycle_idevices','restart');
-        $this->log("Init cycle restart");
         $this->redirect("?tab=".$this->tab);
       }
       if($this->view_mode == 'appleid_edit') {
@@ -345,9 +345,13 @@ class idevices extends module {
    *
    * @access public
    */
+  function restartService() {
+    setGlobal('cycle_idevices','restart');
+    $this->log("Init cycle restart");
+  }
   function setCheckInterval($device_id, $interval = 0) {
     $device = SQLSelectOne("SELECT ID, NAME FROM idevices WHERE DEVICE_ID = '".DBSafe($device_id)."' OR NAME = '".DBSafe($device_id)."'");
-    $this->debug('<pre>setCheckInterval: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>interval: '.$interval.'</pre>');
+    $this->debug('<pre>setCheckInterval: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  interval: '.$interval.'</pre>');
     $device['GET_LOCATION'] = $interval;
     SQLUpdate('idevices', $device);
     return $interval;
@@ -367,22 +371,22 @@ class idevices extends module {
       return 0;
     set_time_limit(600);
     $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
-    $this->debug('<pre>sendMessage: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>message: '.$message.'</br>subject: '.$subject.'</br>sound: '.$sound.'</pre>');
+    $this->debug('<pre>sendMessage: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  message: '.$message.'</br>  subject: '.$subject.'</br>  sound: '.$sound.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD']);
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
       $FindMyiPhone->sendMessage($device['DEVICE_ID'], $message, (bool)$sound, $subject);
     } catch (exception $e) {
       $this->debug($e->getMessage());
     }
     return "Message sended";
   }
-  function playSound($device_id, $message = "") {
+  function playSound($device_id, $subject = '') {
     set_time_limit(600);
     $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
-    $this->debug('<pre>playSound: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  message: '.$message.'</pre>');
+    $this->debug('<pre>playSound: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  subject: '.$subject.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD']);
-      $FindMyiPhone->playSound($device['DEVICE_ID'], $message);
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
+      $FindMyiPhone->playSound($device['DEVICE_ID'], $subject);
     } catch (exception $e) {
       $this->debug($e->getMessage());
     }
@@ -393,7 +397,7 @@ class idevices extends module {
     $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
     $this->debug('<pre>locate: '.$device['NAME'].'</br>  device_id: '.$device_id.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD']);
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
       $location =  $FindMyiPhone->locate($device['DEVICE_ID'], 180);
       if($location->horizontalAccuracy > 1000)
         $location =  $FindMyiPhone->locate($device['DEVICE_ID'], 180);
@@ -425,24 +429,24 @@ class idevices extends module {
     }
     return "Device located";
   }
-  function lostMode($device_id, $message, $phoneNumber = "") {
+  /*function lostMode($device_id, $message, $phoneNumber = '') {
     set_time_limit(0);
     $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
-    $this->debug('<pre>lostMode: '.$device['NAME'].'</br> message: '.$message.'</br> phoneNumber: '.$phoneNumber.'</pre>');
+    $this->debug('<pre>lostMode: '.$device['NAME'].'</br>  message: '.$message.'</br>  phoneNumber: '.$phoneNumber.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD']);
+      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
       $FindMyiPhone->lostMode($device['DEVICE_ID'], $message, $phoneNumber);
     } catch (exception $e) {
       $this->debug($e->getMessage());
     }
     return "device locked";
-  }
+  }*/
   function getDevices($appleid){
     set_time_limit(0);
     $record=SQLSelectOne("SELECT * FROM appleIDs WHERE APPLEID='".DBSafe($appleid)."'");
     $this->debug('getDevices: '.$appleid);
     try {
-      $FindMyiPhone = new FindMyiPhone($record['APPLEID'], $record['PASSWORD']);
+      $FindMyiPhone = new FindMyiPhone($record['APPLEID'], $record['PASSWORD'], $this->deep_debug);
       $FindMyiPhone->getDevices();
       foreach ($FindMyiPhone->devices as $device_id => $device)
       {
@@ -484,7 +488,7 @@ class idevices extends module {
    * @access private
    */
   function install($data='') {
-    subscribeToEvent($this->name, 'SAY');
+    //subscribeToEvent($this->name, 'SAY');
     //subscribeToEvent($this->name, 'SAYTO', '', 10);
     //subscribeToEvent($this->name, 'SAYREPLY', '', 10);
     parent::install();
@@ -501,6 +505,7 @@ class idevices extends module {
     SQLExec('DROP TABLE IF EXISTS idevices');
     if(file_exists(ROOT.'lib/idevices.php'))
       unlink(ROOT.'lib/idevices.php');
+    array_map('unlink', glob(ROOT.'languages/idevices_*.php'));
     unsubscribeFromEvent($this->name, 'SAY');
     unsubscribeFromEvent($this->name, 'SAYTO');
     unsubscribeFromEvent($this->name, 'SAYREPLY');

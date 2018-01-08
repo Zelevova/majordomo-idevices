@@ -35,6 +35,12 @@
 <div>
   <i class="glyphicon glyphicon-apple">iDevices</i>
   &nbsp;
+  [#if CYCLERUN==1#]
+  <span class="label label-success" title="<#LANG_GENERAL_CYCLE#> запущен"><i class="glyphicon glyphicon-thumbs-up">
+  [#else#]
+  <span class="label label-danger" title="<#LANG_GENERAL_CYCLE#> <#LANG_GENERAL_STOPPED#>"><i class="glyphicon glyphicon-exclamation-sign">
+  [#endif#]</i></span>
+  &nbsp;
   <a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i> <#LANG_SETUP#></a>
 </div>
 
