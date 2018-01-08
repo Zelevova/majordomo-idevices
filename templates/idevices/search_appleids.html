@@ -4,6 +4,7 @@
 [#if RESULT#]
 <script type="text/javascript">
   function getDevices(appleid){
+    //TODO: Сделать нормальное модальное окно, с анимацией во время работы скрипта или запуск скрипта в фоне
     var url="?getDevices=1&appleid="+appleid;
     $.ajax({
       url: url,

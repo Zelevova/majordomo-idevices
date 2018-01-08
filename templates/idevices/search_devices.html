@@ -18,6 +18,7 @@
     });
   }
   function playSound(device_id){
+    //TODO: Сделать нормальное модальное окно, с возможностью отправлять сообщение к звуку? Нужно проверить работает ли это
     var url="?playSound=1&device_id="+device_id;
     $.ajax({
       url: url,
@@ -28,6 +29,7 @@
     });
   }
   function locate(name, device_id){
+    //TODO: Сделать нормальное модальное окно, с анимацией во время работы скрипта или запуск скрипта в фоне
     var url="?locate=1&device_id="+device_id+"&name="+name;
     $.ajax({
       url: url,
@@ -38,6 +40,7 @@
     });
   }
   function lostMode(name, device_id){
+    //TODO: Сделать нормальное модальное окно, с вводом текста и номера телефона
     var phoneNumber = '';
     var message = prompt("Input text message:", '');
     if (message == null) return;
