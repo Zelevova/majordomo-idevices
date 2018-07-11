@@ -138,10 +138,10 @@ class idevices extends module {
    * @access public
    */
   function log($message) {
-    if(!is_dir(ROOT . 'debmes')) {
-      mkdir(ROOT . 'debmes', 0777);
+    if(!is_dir(ROOT . 'cms/debmes')) {
+      mkdir(ROOT . 'cms/debmes', 0777);
     }
-    $today_file = ROOT . 'debmes/log_' . date('Y-m-d') . '_idevices.php.txt';
+    $today_file = ROOT . 'cms/debmes/log_' . date('Y-m-d') . '_idevices.php.txt';
     $data = date("H:i:s")." " . $message . "\n";
     file_put_contents($today_file, $data, FILE_APPEND | LOCK_EX);
   }
@@ -162,7 +162,7 @@ class idevices extends module {
       header("HTTP/1.0: 200 OK\n");
       header('Content-Type: text/html; charset=utf-8');
       // Find last midifed
-      $filename = ROOT . 'debmes/log_*_idevices.php.txt';
+      $filename = ROOT . 'cms/debmes/log_*_idevices.php.txt';
       foreach(glob($filename) as $file) {
         $LastModified[] = filemtime($file);
         $FileName[] = $file;
