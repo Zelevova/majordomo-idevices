@@ -15,6 +15,9 @@ require_once(DIR_MODULES . 'idevices/FindMyiPhone.php');
 
 class idevices extends module {
   private $deep_debug = false;
+  private $current_AppleID = '';
+  private $FindMyiPhone;
+  
   /**
    * idevices
    *
@@ -28,6 +31,23 @@ class idevices extends module {
     $this->module_category="<#LANG_SECTION_DEVICES#>";
     $this->checkInstalled();
   }
+  
+  /**
+   * idevices
+   *
+   * Module class constructor
+   *
+   * @access private
+   */
+  function initClient($device_id) {
+    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    if ($this->current_AppleID != $device['APPLEID']) {
+      $this->current_AppleID = $device['APPLEID'];
+      $this->FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
+    }
+    return $device;
+  }
+  
   /**
    * saveParams
    *
@@ -123,7 +143,7 @@ class idevices extends module {
    *
    * Description
    *
-   * @access public
+   * @access private
    */
   function debug($content) {
     $this->getConfig();
@@ -135,13 +155,13 @@ class idevices extends module {
    *
    * Description
    *
-   * @access public
+   * @access private
    */
   function log($message) {
-    if(!is_dir(ROOT . 'debmes')) {
-      mkdir(ROOT . 'debmes', 0777);
+    if(!is_dir(ROOT . 'cms/debmes')) {
+      mkdir(ROOT . 'cms/debmes', 0777);
     }
-    $today_file = ROOT . 'debmes/log_' . date('Y-m-d') . '_idevices.php.txt';
+    $today_file = ROOT . 'cms/debmes/log_' . date('Y-m-d') . '_idevices.php.txt';
     $data = date("H:i:s")." " . $message . "\n";
     file_put_contents($today_file, $data, FILE_APPEND | LOCK_EX);
   }
@@ -154,7 +174,7 @@ class idevices extends module {
    */
   function admin(&$out) {
     $this->getConfig();
-    $out['CYCLERUN'] = ((time() - gg('cycle_idevicesRun')) < 300 ) ? 1 : 0;
+    $out['CYCLERUN'] = ((time() - gg('cycle_idevicesRun')) < 120 ) ? 1 : 0;
     global $ajax;
     global $filter;
     global $limit;
@@ -162,7 +182,7 @@ class idevices extends module {
       header("HTTP/1.0: 200 OK\n");
       header('Content-Type: text/html; charset=utf-8');
       // Find last midifed
-      $filename = ROOT . 'debmes/log_*_idevices.php.txt';
+      $filename = ROOT . 'cms/debmes/log_*_idevices.php.txt';
       foreach(glob($filename) as $file) {
         $LastModified[] = filemtime($file);
         $FileName[] = $file;
@@ -228,18 +248,6 @@ class idevices extends module {
       echo $res;
       exit;
     }
-    /*global $lostMode;
-    if ($lostMode)
-    {
-      header("HTTP/1.0: 200 OK\n");
-      header('Content-Type: text/html; charset=utf-8');
-      global $device_id;
-      global $message;
-      global $phoneNumber;
-      $res = $this->lostMode($device_id, $message, $phoneNumber);
-      echo $res;
-      exit;
-    }*/
     global $getDevices;
     if ($getDevices)
     {
@@ -370,11 +378,10 @@ class idevices extends module {
     if($message == "")
       return 0;
     set_time_limit(600);
-    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $device = $this->initClient($device_id);
     $this->debug('<pre>sendMessage: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  message: '.$message.'</br>  subject: '.$subject.'</br>  sound: '.$sound.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
-      $FindMyiPhone->sendMessage($device['DEVICE_ID'], $message, (bool)$sound, $subject);
+      $this->FindMyiPhone->sendMessage($device['DEVICE_ID'], $message, (bool)$sound, $subject);
     } catch (exception $e) {
       $this->debug($e->getMessage());
     }
@@ -382,11 +389,10 @@ class idevices extends module {
   }
   function playSound($device_id, $subject = '') {
     set_time_limit(600);
-    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $device = $this->initClient($device_id);
     $this->debug('<pre>playSound: '.$device['NAME'].'</br>  device_id: '.$device_id.'</br>  subject: '.$subject.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
-      $FindMyiPhone->playSound($device['DEVICE_ID'], $subject);
+      $this->FindMyiPhone->playSound($device['DEVICE_ID'], $subject);
     } catch (exception $e) {
       $this->debug($e->getMessage());
     }
@@ -394,23 +400,19 @@ class idevices extends module {
   }
   function locate($device_id){
     set_time_limit(0);
-    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
+    $device = $this->initClient($device_id);
     $this->debug('<pre>locate: '.$device['NAME'].'</br>  device_id: '.$device_id.'</pre>');
     try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
-      $location =  $FindMyiPhone->locate($device['DEVICE_ID'], 180);
-      if($location->horizontalAccuracy > 1000)
-        $location =  $FindMyiPhone->locate($device['DEVICE_ID'], 180);
+      $location =  $this->FindMyiPhone->locate($device['DEVICE_ID'], 180);
       $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($device['APPLEID'])."' AND DEVICE_ID='".DBSafe($device['DEVICE_ID'])."'");
-      $prop['NAME'] = $FindMyiPhone->devices[$device['DEVICE_ID']]->name;
-      $prop['DEVICE_ID'] = $device['DEVICE_ID'];
-      $prop['APPLEID'] = $device['APPLEID'];
-      $prop['BATTERY_LEVEL'] = round($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100, 2);
-      $prop['BATTERY_STATUS'] = ($FindMyiPhone->devices[$device['DEVICE_ID']]->batteryStatus == "Charging") ? 1 : 0;
+      $prop['NAME'] = $this->FindMyiPhone->devices[$device['DEVICE_ID']]->name;
+      $prop['BATTERY_LEVEL'] = round($this->FindMyiPhone->devices[$device['DEVICE_ID']]->batteryLevel*100, 2);
+      $prop['BATTERY_STATUS'] = ($this->FindMyiPhone->devices[$device['DEVICE_ID']]->batteryStatus == "Charging") ? 1 : 0;
       $prop['ACCURACY'] = $location->horizontalAccuracy;
       $prop['LATITUDE'] = $location->latitude;
       $prop['LONGITUDE'] = $location->longitude;
-      $prop['UPDATED']=date('Y-m-d H:i:s');
+      $prop['POSITION_TYPE'] = $this->FindMyiPhone->devices[$device['DEVICE_ID']]->API['location']['positionType'];
+      $prop['UPDATED'] = date('Y-m-d H:i:s', substr($location->timestamp, 0, -3));
       SQLUpdateInsert('idevices', $prop);
       if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
         $url = BASE_URL . '/gps.php?latitude=' . str_replace(',', '.', $prop['LATITUDE'])
@@ -429,34 +431,25 @@ class idevices extends module {
     }
     return "Device located";
   }
-  /*function lostMode($device_id, $message, $phoneNumber = '') {
-    set_time_limit(0);
-    $device = SQLSelectOne("SELECT appleIDs.APPLEID, appleIDs.PASSWORD, idevices.DEVICE_ID, idevices.NAME FROM appleIDs, idevices WHERE appleIDs.APPLEID = idevices.APPLEID AND (idevices.DEVICE_ID = '".DBSafe($device_id)."' OR idevices.NAME = '".DBSafe($device_id)."')");
-    $this->debug('<pre>lostMode: '.$device['NAME'].'</br>  message: '.$message.'</br>  phoneNumber: '.$phoneNumber.'</pre>');
-    try {
-      $FindMyiPhone = new FindMyiPhone($device['APPLEID'], $device['PASSWORD'], $this->deep_debug);
-      $FindMyiPhone->lostMode($device['DEVICE_ID'], $message, $phoneNumber);
-    } catch (exception $e) {
-      $this->debug($e->getMessage());
-    }
-    return "device locked";
-  }*/
   function getDevices($appleid){
     set_time_limit(0);
     $record=SQLSelectOne("SELECT * FROM appleIDs WHERE APPLEID='".DBSafe($appleid)."'");
     $this->debug('getDevices: '.$appleid);
     try {
-      $FindMyiPhone = new FindMyiPhone($record['APPLEID'], $record['PASSWORD'], $this->deep_debug);
-      $FindMyiPhone->getDevices();
-      foreach ($FindMyiPhone->devices as $device_id => $device)
+      if ($this->current_AppleID != $appleid) {
+        $this->current_AppleID = $appleid;
+        $this->FindMyiPhone = new FindMyiPhone($record['APPLEID'], $record['PASSWORD'], $this->deep_debug);
+      }
+      $this->FindMyiPhone->getDevices();
+      foreach ($this->FindMyiPhone->devices as $device_id => $device)
       {
-        $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($record['APPLEID'])."' AND DEVICE_ID='".DBSafe($device_id)."'");
+        $prop=SQLSelectOne("SELECT * FROM idevices WHERE APPLEID='".DBSafe($appleid)."' AND DEVICE_ID='".DBSafe($device_id)."'");
         $prop['NAME'] = $device->name;
         $prop['DEVICE_ID'] = $device_id;
         $prop['APPLEID'] = $record['APPLEID'];
         $prop['BATTERY_LEVEL'] = round($device->batteryLevel*100, 2);
         $prop['BATTERY_STATUS'] = ($device->batteryStatus == "Charging") ? 1 : 0;
-        $prop['UPDATED']=date('Y-m-d H:i:s');
+        $prop['UPDATED']=date('Y-m-d H:i:s', substr($device->serverAPI["serverTimestamp"], 0, -3));
         SQLUpdateInsert('idevices', $prop);
       }
       unset($device);
@@ -492,6 +485,7 @@ class idevices extends module {
     //subscribeToEvent($this->name, 'SAYTO', '', 10);
     //subscribeToEvent($this->name, 'SAYREPLY', '', 10);
     parent::install();
+    &this->restartService();
   }
   /**
    * Uninstall
@@ -537,6 +531,7 @@ class idevices extends module {
       idevices: LATITUDE varchar(20) NOT NULL DEFAULT ''
       idevices: LONGITUDE varchar(20) NOT NULL DEFAULT ''
       idevices: ACCURACY int(5) NOT NULL DEFAULT '0'
+      idevices: POSITION_TYPE varchar(20) NOT NULL DEFAULT ''
       idevices: UPDATED datetime
 EOD;
      parent::dbInstall($data);

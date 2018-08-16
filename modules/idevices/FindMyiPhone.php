@@ -201,7 +201,7 @@ TABLEFOOTER;
         list($headers, $body) = $this->curlPOST($url, "", $this->username . ":" . $this->password);
         $this->devices = array();
         for ($x = 0; $x < sizeof($body["content"]); $x++) {
-            $device = $this->generateDevice($body["content"][$x]);
+            $device = $this->generateDevice($body["content"][$x],$body["serverContext"]);
             $this->devices[$device->ID] = $device;
         }
     }
@@ -223,9 +223,10 @@ TABLEFOOTER;
     /**
      * This method takes the raw device details from the API and converts it to a FindMyiPhoneDevice object
      */
-    private function generateDevice($deviceDetails) {
+    private function generateDevice($deviceDetails, $serverDetails) {
         $device = new FindMyiPhoneDevice();
         $device->API = $deviceDetails;
+        $device->serverAPI = $serverDetails;
         $device->ID = $device->API["id"];
         $device->batteryLevel = $device->API["batteryLevel"];
         $device->batteryStatus = $device->API["batteryStatus"];
@@ -254,7 +255,7 @@ TABLEFOOTER;
         list($headers, $body) = $this->curlPOST($url, $body, $this->username . ":" . $this->password);
         $this->devices = array();
         for ($x = 0; $x < sizeof($body["content"]); $x++) {
-            $device = $this->generateDevice($body["content"][$x]);
+            $device = $this->generateDevice($body["content"][$x],$body["serverContext"]);
             $this->devices[$device->ID] = $device;
         }
     }
