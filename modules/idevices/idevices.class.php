@@ -485,7 +485,7 @@ class idevices extends module {
     //subscribeToEvent($this->name, 'SAYTO', '', 10);
     //subscribeToEvent($this->name, 'SAYREPLY', '', 10);
     parent::install();
-    &this->restartService();
+    $this->restartService();
   }
   /**
    * Uninstall
