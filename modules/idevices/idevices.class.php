@@ -414,7 +414,7 @@ class idevices extends module {
       $prop['POSITION_TYPE'] = $this->FindMyiPhone->devices[$device['DEVICE_ID']]->API['location']['positionType'];
       $prop['UPDATED'] = date('Y-m-d H:i:s', substr($location->timestamp, 0, -3));
       SQLUpdateInsert('idevices', $prop);
-      if(file_exists(DIR_MODULES.'app_gpstrack/installed')) {
+      if(file_exists(DIR_MODULES.'app_gpstrack/installed') || count(SQLSelectOne("select ID from plugins where module_name='app_gpstrack'"))) {
         $url = BASE_URL . '/gps.php?latitude=' . str_replace(',', '.', $prop['LATITUDE'])
         . '&longitude=' . str_replace(',', '.', $prop['LONGITUDE'])
         . '&altitude=' . 0
