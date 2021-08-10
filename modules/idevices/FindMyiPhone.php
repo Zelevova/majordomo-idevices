@@ -250,7 +250,21 @@ TABLEFOOTER;
     private function refreshDevices($deviceID = "") {
         $url = "https://fmipmobile.icloud.com/fmipservice/device/" . $this->username . "/refreshClient";
         if (strlen($deviceID) > 0) {
-            $body = json_encode(array("clientContext" => array("appVersion" => $this->client["app-version"], "shouldLocate" => true, "selectedDevice" => $deviceID, "fmly" => true)));
+                //$body = json_encode(array("clientContext" => array("appVersion" => $this->client["app-version"], "shouldLocate" => true, "selectedDevice" => $deviceID, "fmly" => true)));
+		$body = json_encode(array("clientContext" => array(
+			'appName' => 'FindMyiPhone',
+			'appVersion' => '3.0',
+			'buildVersion' => '376',
+			'clientTimestamp' => 0,
+			'deviceUDID' => null,
+			'inactiveTime' => 1,
+			'osVersion' => '7.0.3',
+			'productType' => 'iPhone6,1',
+			"shouldLocate" => true,
+			"selectedDevice" => $deviceID,
+			"fmly" => true
+
+		)));
         }
         list($headers, $body) = $this->curlPOST($url, $body, $this->username . ":" . $this->password);
         $this->devices = array();
