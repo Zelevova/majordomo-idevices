@@ -28,7 +28,14 @@ $dictionary=array(
 'LOCATE' =>'Locate',
 'LOST_MODE' =>'Enable Lost Mode on this Device',
 'INPUT_MESSAGE_TEXT' => 'Enter Message Text',
-'AppleIDs' => 'AppleIDs List'
+'AppleIDs' => 'AppleIDs List',
+
+'IDEVICES_MAPTYPE' => 'Map type',
+'IDEVICES_MAPTYPE_ROADMAP' => 'Roadmap',
+'IDEVICES_MAPTYPE_SATELLITE' => 'Satellite',
+'IDEVICES_MAPTYPE_HYBRID' => 'Hybrid',
+'IDEVICES_MAPTYPE_TERRAIN' => 'Terrain'
+
 );
 
 foreach ($dictionary as $k=>$v) {
