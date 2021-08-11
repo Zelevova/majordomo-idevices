@@ -261,13 +261,16 @@ class idevices extends module {
     
     $out['DEBUG'] = $this->config['DEBUG'];
     $out['PAGINATION'] = $this->config['PAGINATION'] > 0 ? $this->config['PAGINATION'] : 10;
-    
+    $out['APIKEY'] = $this->config['APIKEY'];
+
     if($this->data_source == 'idevices' || $this->data_source == '') {
       if($this->view_mode == 'update_settings') {
         global $debug;
         $this->config['DEBUG'] = $debug;
         global $pagination;
+        global $apikey;
         $this->config['PAGINATION'] = $pagination;
+        $this->config['APIKEY'] = $apikey;
         $this->saveConfig();
         $this->log("Save config");
         $this->redirect("?tab=".$this->tab);
