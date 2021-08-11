@@ -28,7 +28,14 @@ $dictionary=array(
 'LOCATE' =>'Найти',
 'LOST_MODE' =>'Включить режим пропажи на этом устройстве',
 'INPUT_MESSAGE_TEXT' => 'Введите текст сообщения',
-'AppleIDs' => 'Список AppleID'
+'AppleIDs' => 'Список AppleID',
+
+'IDEVICES_MAPTYPE' => 'Тип карты',
+'IDEVICES_MAPTYPE_ROADMAP' => 'Схема',
+'IDEVICES_MAPTYPE_SATELLITE' => 'Спутник',
+'IDEVICES_MAPTYPE_HYBRID' => 'Гибрид',
+'IDEVICES_MAPTYPE_TERRAIN' => 'Рельеф'
+
 );
 
 foreach ($dictionary as $k=>$v) {
