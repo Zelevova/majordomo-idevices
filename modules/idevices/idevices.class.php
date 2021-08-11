@@ -262,6 +262,8 @@ class idevices extends module {
     $out['DEBUG'] = $this->config['DEBUG'];
     $out['PAGINATION'] = $this->config['PAGINATION'] > 0 ? $this->config['PAGINATION'] : 10;
     $out['APIKEY'] = $this->config['APIKEY'];
+    $out['MAPTYPE'] = ($this->config['MAPTYPE'] ? $this->config['MAPTYPE'] : 'hybrid');
+
 
     if($this->data_source == 'idevices' || $this->data_source == '') {
       if($this->view_mode == 'update_settings') {
@@ -269,8 +271,11 @@ class idevices extends module {
         $this->config['DEBUG'] = $debug;
         global $pagination;
         global $apikey;
+        global $maptype;
+        
         $this->config['PAGINATION'] = $pagination;
         $this->config['APIKEY'] = $apikey;
+        $this->config['MAPTYPE'] = $maptype;
         $this->saveConfig();
         $this->log("Save config");
         $this->redirect("?tab=".$this->tab);
