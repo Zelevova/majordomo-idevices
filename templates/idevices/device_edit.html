@@ -77,7 +77,7 @@
   </fieldset>
 </form>
 <br/>
-[#if LATITUDE!='' and LONGITUDE!=''#]
-<div data-placement="center"><img src="http://maps.googleapis.com/maps/api/staticmap?center=[#LATITUDE#],[#LONGITUDE#]&amp;size=512x512&amp;maptype=hybrid&amp;sensor=false&amp;zoom=14&amp;markers=[#LATITUDE#],[#LONGITUDE#]" border="0"></div>
+[#if LATITUDE!='' and LONGITUDE!='' and APIKEY!=''#]
+<div data-placement="center"><img src="https://maps.googleapis.com/maps/api/staticmap?center=[#LATITUDE#],[#LONGITUDE#]&amp;size=512x512&amp;maptype=[#MAPTYPE#]&amp;sensor=false&amp;zoom=14&amp;markers=[#LATITUDE#],[#LONGITUDE#]&key=[#APIKEY#]" border="0"></div>
 [#endif#]
 <hr/>
