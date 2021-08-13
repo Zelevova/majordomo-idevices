@@ -4,7 +4,7 @@
 * Default language file for iDevices module
 *
 */
-  
+
 $dictionary=array(
 'ABOUT' => 'About',
 'DEBUG' => 'Debug',
@@ -34,7 +34,11 @@ $dictionary=array(
 'IDEVICES_MAPTYPE_ROADMAP' => 'Roadmap',
 'IDEVICES_MAPTYPE_SATELLITE' => 'Satellite',
 'IDEVICES_MAPTYPE_HYBRID' => 'Hybrid',
-'IDEVICES_MAPTYPE_TERRAIN' => 'Terrain'
+'IDEVICES_MAPTYPE_TERRAIN' => 'Terrain',
+
+'IDEVICES_CYCLE_STATE' => 'Cycle status',
+'IDEVICES_CYCLE_START' => 'Cycle running',
+'IDEVICES_CYCLE_STOP' => 'Cycle stopped'
 
 );
 
