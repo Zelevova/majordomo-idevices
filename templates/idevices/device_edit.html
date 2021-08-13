@@ -62,7 +62,7 @@
       <label class="control-label" data-toggle="tooltip" data-placement="right" title="<#LANG_HELP_POSITION_TYPE#>"><#LANG_POSITION_TYPE#> <i class="glyphicon glyphicon-info-sign"></i></label>
       <div class="controls">[#POSITION_TYPE#]</div>
     </div>
-    
+
     <div class="form-actions">
       <button type="submit" name="subm" value="<#LANG_SUBMIT#>" class="btn btn-defaul btn-primary"><#LANG_SUBMIT#></button>
       <a href="?" class="btn btn-default"><#LANG_CANCEL#></a>
@@ -78,6 +78,6 @@
 </form>
 <br/>
 [#if LATITUDE!='' and LONGITUDE!='' and APIKEY!=''#]
-<div data-placement="center"><img src="https://maps.googleapis.com/maps/api/staticmap?center=[#LATITUDE#],[#LONGITUDE#]&amp;size=512x512&amp;maptype=[#MAPTYPE#]&amp;sensor=false&amp;zoom=14&amp;markers=[#LATITUDE#],[#LONGITUDE#]&key=[#APIKEY#]" border="0"></div>
+<div data-placement="center"><img src="https://maps.googleapis.com/maps/api/staticmap?center=[#LATITUDE#],[#LONGITUDE#]&amp;size=512x512&amp;maptype=[#MAPTYPE#]&amp;sensor=false&amp;zoom=16&amp;markers=[#LATITUDE#],[#LONGITUDE#]&key=[#APIKEY#]" border="0"></div>
 [#endif#]
 <hr/>
