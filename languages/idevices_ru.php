@@ -34,7 +34,11 @@ $dictionary=array(
 'IDEVICES_MAPTYPE_ROADMAP' => 'Схема',
 'IDEVICES_MAPTYPE_SATELLITE' => 'Спутник',
 'IDEVICES_MAPTYPE_HYBRID' => 'Гибрид',
-'IDEVICES_MAPTYPE_TERRAIN' => 'Рельеф'
+'IDEVICES_MAPTYPE_TERRAIN' => 'Рельеф',
+
+'IDEVICES_CYCLE_STATE' => 'Статус цикла',
+'IDEVICES_CYCLE_START' => 'Цикл запущен',
+'IDEVICES_CYCLE_STOP' => 'Цикл остановлен'
 
 );
 

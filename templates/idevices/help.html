@@ -1,6 +1,6 @@
 <br/>
 <div class="panel-group" id="accordion">
-  
+
   <div class="panel panel-info">
     <div class="panel-heading">
       <a data-toggle="collapse" data-parent="#accordion" href="#device_help">Настройка устройства</a>
@@ -9,7 +9,7 @@
       <p>Для работы модуля необходимо <a href="https://support.apple.com/ru-ru/HT205362#findmyios" target="_blank">настроить службу «Найти iPhone»</a> на устройстве с которым настраивается взаимодействие</p>
     </div>
   </div>
-  
+
   <div class="panel panel-info">
     <div class="panel-heading">
       <a data-toggle="collapse" data-parent="#accordion" href="#signin_help"><#LANG_AppleIDs#></a>
@@ -19,7 +19,7 @@
       <p>В случае добавления нового устройства к уже введенному AppleID можно воспользоваться кнопкой <i class="glyphicon glyphicon-refresh"></i> для обновления списка устройств привязанных к данному Apple ID.</p>
     </div>
   </div>
-  
+
   <div class="panel panel-info">
     <div class="panel-heading">
       <a data-toggle="collapse" data-parent="#accordion" href="#devices_help">Информация об устройствах</a>
@@ -33,7 +33,7 @@
       </ul>
     </div>
   </div>
-  
+
   <div class="panel panel-info">
     <div class="panel-heading">
       <a data-toggle="collapse" data-parent="#accordion" href="#code_help">Вызов модуля в своих скриптах/методах</a>
@@ -42,11 +42,11 @@
       <p><b>Для отправки текстовых сообщений</b></br>
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
-        $idevices_module->sendMessage($name, $message[, $subject, $sound]);</code></p>
+        $idevices_module->sendMessage($name, $message, $subject, $sound);</code>Особенности применения: $subject может быть либо пустым и не будет выводиться, либо любым и на устройстве будет заголовок "Оповещение "Найти (iPhone|iPad...)"</p>
       <p><b>Для отправки звуковых оповещений</b></br>
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
-        $idevices_module->playSound($name[, $subject]);</code>Особенности применения: $subject может быть либо пустым и не будет выводиться, либо любым и на устройстве будет заголовок "Оповещение "Найти (iPhone|iPad...)"</p>
+        $idevices_module->playSound($name, $subject);</code>Особенности применения: $subject может быть либо пустым и не будет выводиться, либо любым и на устройстве будет заголовок "Оповещение "Найти (iPhone|iPad...)"</p>
       <p><b>Для определения местоположения устройств</b></br>
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
@@ -55,7 +55,7 @@
       <code style="display:block">include_once(DIR_MODULES . 'idevices/idevices.class.php');</br>
         $idevices_module = new idevices();</br>
         $idevices_module->getCheckInterval($name); // чтение</br>
-        $idevices_module->setCheckInterval($name[, $interval]); // установка</code></p>
+        $idevices_module->setCheckInterval($name, $interval); // установка</code></p>
     </div>
   </div>
 </div>
