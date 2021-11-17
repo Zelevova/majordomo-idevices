@@ -253,7 +253,7 @@ TABLEFOOTER;
             //$body = json_encode(array("clientContext" => array("appVersion" => $this->client["app-version"], "shouldLocate" => true, "selectedDevice" => $deviceID, "fmly" => true)));
 		$body = json_encode(array("clientContext" => array(
 			'appName' => 'FindMyiPhone',
-			'appVersion' => '3.0',
+			'appVersion' => '5.0',
 			'buildVersion' => '376',
 			'clientTimestamp' => 0,
 			'deviceUDID' => null,
