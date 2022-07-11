@@ -258,7 +258,7 @@ TABLEFOOTER;
 			'clientTimestamp' => 0,
 			'deviceUDID' => null,
 			'inactiveTime' => 1,
-			'osVersion' => '7.0.3',
+			'osVersion' => '9.3.5',
 			'productType' => 'iPhone6,1',
 			"shouldLocate" => true,
 			"selectedDevice" => $deviceID,
